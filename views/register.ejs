@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Register | Echo Showcase Hub</title>
+  <meta name="description" content="Create your EchoHub account with email and mobile verification.">
+  
+  <!-- Bootstrap 5 CSS CDN -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+  
+  <!-- Bootstrap Icons CDN -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+  
+  <!-- Google Fonts: Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body class="bg-dark text-light d-flex flex-column min-vh-100 position-relative">
+
+  <!-- Ambient Glass Background Glowing Orbs -->
+  <div class="ambient-glow-container">
+    <div class="ambient-orb ambient-orb-1"></div>
+    <div class="ambient-orb ambient-orb-2"></div>
+    <div class="ambient-orb ambient-orb-3"></div>
+  </div>
+
+  <!-- Minimal Auth Navbar -->
+  <nav class="navbar navbar-dark sticky-top echo-navbar py-3">
+    <div class="container">
+      <a class="navbar-brand d-flex align-items-center gap-2 fw-bold" href="/">
+        <div class="brand-icon-box bg-warning text-dark rounded-circle d-flex align-items-center justify-content-center" style="width: 38px; height: 38px;">
+          <i class="bi bi-soundwave fs-4"></i>
+        </div>
+        <span class="fs-4 text-light">Echo<span class="text-warning">Hub</span></span>
+      </a>
+      <a href="/auth/login" class="btn btn-glass btn-sm rounded-pill px-3 fw-semibold">
+        <i class="bi bi-box-arrow-in-right me-1"></i> Login
+      </a>
+    </div>
+  </nav>
+
+  <main class="flex-grow-1 d-flex align-items-center justify-content-center py-5">
+    <div class="container">
+      <div class="row justify-content-center">
+        <div class="col-lg-5 col-md-7 col-sm-10">
+
+          <!-- Auth Glass Card -->
+          <div class="auth-card glass-panel rounded-4 p-4 p-md-5 shadow-lg">
+            
+            <!-- Header -->
+            <div class="text-center mb-4">
+              <div class="auth-icon-box bg-warning bg-opacity-10 border border-warning border-opacity-25 rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 64px; height: 64px;">
+                <i class="bi bi-person-plus-fill fs-2 text-warning"></i>
+              </div>
+              <h1 class="h3 fw-bold text-light mb-1">Create Account</h1>
+              <p class="text-muted small">Join the acoustic creator community</p>
+            </div>
+
+            <!-- Error/Message Alerts -->
+            <% if (error) { %>
+              <div class="alert alert-danger d-flex align-items-center gap-2 rounded-3 py-2 px-3" role="alert">
+                <i class="bi bi-exclamation-triangle-fill"></i>
+                <small><%= error %></small>
+              </div>
+            <% } %>
+            <% if (message) { %>
+              <div class="alert alert-success d-flex align-items-center gap-2 rounded-3 py-2 px-3" role="alert">
+                <i class="bi bi-check-circle-fill"></i>
+                <small><%= message %></small>
+              </div>
+            <% } %>
+
+            <!-- Registration Form -->
+            <form action="/auth/register" method="POST" class="needs-validation" novalidate id="registerForm">
+              
+              <div class="mb-3">
+                <label for="name" class="form-label small text-light fw-semibold">
+                  <i class="bi bi-person me-1 text-warning"></i> Full Name
+                </label>
+                <input type="text" class="form-control echo-input" id="name" name="name" placeholder="e.g., Alex Vance" required autocomplete="name">
+                <div class="invalid-feedback small">Please enter your full name.</div>
+              </div>
+
+              <div class="mb-3">
+                <label for="email" class="form-label small text-light fw-semibold">
+                  <i class="bi bi-envelope me-1 text-warning"></i> Gmail Address
+                </label>
+                <input type="email" class="form-control echo-input" id="email" name="email" placeholder="your.email@gmail.com" required autocomplete="email">
+                <div class="invalid-feedback small">Please enter a valid Gmail address.</div>
+              </div>
+
+              <div class="mb-4">
+                <label for="mobile" class="form-label small text-light fw-semibold">
+                  <i class="bi bi-phone me-1 text-warning"></i> Mobile Number
+                </label>
+                <input type="tel" class="form-control echo-input" id="mobile" name="mobile" placeholder="e.g., +91 9876543210" required autocomplete="tel">
+                <div class="invalid-feedback small">Please enter a valid mobile number.</div>
+              </div>
+
+              <button type="submit" class="btn btn-warning fw-bold w-100 rounded-3 py-2 shadow" id="registerBtn">
+                <i class="bi bi-shield-check me-1"></i> Send Verification OTPs
+              </button>
+            </form>
+
+            <!-- Divider -->
+            <div class="d-flex align-items-center gap-3 my-4">
+              <hr class="flex-grow-1 border-secondary border-opacity-25">
+              <span class="text-muted small">or</span>
+              <hr class="flex-grow-1 border-secondary border-opacity-25">
+            </div>
+
+            <!-- Switch to Login -->
+            <div class="text-center">
+              <p class="text-muted small mb-0">
+                Already have an account? 
+                <a href="/auth/login" class="text-warning fw-semibold text-decoration-none">Login here <i class="bi bi-arrow-right"></i></a>
+              </p>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Bootstrap 5 JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+  <script>
+    // Form validation
+    document.getElementById('registerForm').addEventListener('submit', function(e) {
+      if (!this.checkValidity()) {
+        e.preventDefault();
+        e.stopPropagation();
+      } else {
+        const btn = document.getElementById('registerBtn');
+        btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span> Sending OTPs...';
+      }
+      this.classList.add('was-validated');
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,28 @@
+{
+  "name": "echo-showcase-hub",
+  "version": "1.0.0",
+  "description": "Music Creator & Acoustic Showcase Hub",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js",
+    "dev": "node --watch app.js"
+  },
+  "keywords": [
+    "music",
+    "acoustic",
+    "express",
+    "mongoose",
+    "ejs",
+    "bootstrap5"
+  ],
+  "author": "Echo Hub Team",
+  "license": "MIT",
+  "dependencies": {
+    "dotenv": "^16.4.5",
+    "ejs": "^3.1.9",
+    "express": "^4.19.2",
+    "express-session": "^1.19.0",
+    "mongoose": "^8.3.1",
+    "nodemailer": "^9.0.3"
+  }
+}
