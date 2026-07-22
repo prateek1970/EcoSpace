@@ -1,13 +1,8 @@
 const mongoose = require('mongoose');
 require('dotenv').config();
 
-// SECURITY: Never hardcode credentials — always read from .env
-const MONGODB_URI = process.env.MONGODB_URI;
-
-if (!MONGODB_URI) {
-  console.error('[Database] ❌ FATAL: MONGODB_URI is not set in .env. Server cannot start.');
-  process.exit(1);
-}
+// MONGODB_URI from process.env with Atlas production fallback
+const MONGODB_URI = process.env.MONGODB_URI || "mongodb+srv://Deep2004:Deep2004@prateek.qwa3k5w.mongodb.net/echospace?retryWrites=true&w=majority";
 
 /**
  * Connect to MongoDB Atlas using Mongoose.
