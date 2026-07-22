@@ -1,415 +1,596 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Echo Showcase Hub | Music Creator & Acoustic Showcase</title>
-  <meta name="description" content="Discover, showcase, and collaborate on acoustic covers, original tracks, and jam sessions.">
-  
-  <!-- Bootstrap 5 CSS CDN -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-  
-  <!-- Bootstrap Icons CDN -->
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-  
-  <!-- Google Fonts: Inter -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-  
-  <!-- Custom CSS -->
-  <link rel="stylesheet" href="/css/style.css">
-</head>
-<body class="bg-dark text-light d-flex flex-column min-vh-100">
+  <title>EchoSpace — Live @ NICE Grounds, Bengaluru</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Montserrat:wght@600;700;800&family=Inter:wght@400;500;600&display=swap"
+    rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #1D0324;
+      color: #FFD2E1;
+    }
 
-  <!-- Navigation Bar -->
-  <nav class="navbar navbar-expand-lg navbar-dark bg-dark border-bottom border-secondary sticky-top echo-navbar shadow-sm">
-    <div class="container">
-      <a class="navbar-brand d-flex align-items-center gap-2 fw-bold text-warning" href="/">
-        <div class="brand-icon-box bg-warning text-dark rounded-circle d-flex align-items-center justify-content-center" style="width: 38px; height: 38px;">
-          <i class="bi bi-soundwave fs-4"></i>
-        </div>
-        <span class="fs-4 tracking-wide text-light">Echo<span class="text-warning">Hub</span></span>
+    .font-bebas {
+      font-family: 'Bebas Neue', sans-serif;
+    }
+
+    .glow-pink {
+      text-shadow: 0 0 20px #FF007F, 0 0 40px #FF007F;
+    }
+
+    .glow-green {
+      text-shadow: 0 0 15px #39FF14, 0 0 30px #39FF14;
+    }
+
+    .glass-card {
+      background: rgba(53, 11, 66, 0.75);
+      backdrop-filter: blur(14px);
+      border: 1px solid rgba(255, 0, 127, 0.25);
+    }
+
+    .glass-nav {
+      background: rgba(29, 3, 36, 0.85);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid rgba(255, 210, 225, 0.15);
+    }
+  </style>
+</head>
+
+<body class="overflow-x-hidden min-h-screen">
+
+  <!-- NAVBAR -->
+  <nav class="sticky top-0 z-40 glass-nav px-4 py-3.5">
+    <div class="max-w-7xl mx-auto flex items-center justify-between">
+      <a href="/" class="flex items-center gap-2">
+        <span class="font-bebas text-3xl text-[#FFD2E1] glow-pink tracking-wider">ECHOSPACE</span>
+        <span
+          class="text-[10px] bg-[#FF007F]/20 text-[#39FF14] border border-[#39FF14]/40 px-2 py-0.5 rounded-full font-bold uppercase">Bengaluru
+          2026</span>
       </a>
-      
-      <button class="navbar-toggler border-secondary" type="button" data-bs-toggle="collapse" data-bs-target="#echoNavbar" aria-controls="echoNavbar" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      
-      <div class="collapse navbar-collapse" id="echoNavbar">
-        <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-4 gap-1">
-          <li class="nav-item">
-            <a class="nav-link text-light px-3 rounded text-hover-warning" href="/">
-              <i class="bi bi-disc me-1 text-warning"></i> Showcase
-            </a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link text-light px-3 rounded text-hover-warning" href="#collab-section">
-              <i class="bi bi-people me-1 text-info"></i> Collab Hub
-            </a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link text-light px-3 rounded text-hover-warning" href="/admin">
-              <i class="bi bi-sliders me-1 text-danger"></i> Studio Admin
-            </a>
-          </li>
-        </ul>
-        
-        <div class="d-flex align-items-center gap-2 mt-2 mt-lg-0">
-          <a href="#collab-section" class="btn btn-outline-warning btn-sm d-flex align-items-center gap-1 rounded-pill px-3 fw-semibold">
-            <i class="bi bi-mic-fill"></i> Submit Collab Call
-          </a>
-          <a href="/admin" class="btn btn-warning btn-sm d-flex align-items-center gap-1 rounded-pill px-3 fw-bold text-dark">
-            <i class="bi bi-plus-circle-fill"></i> Add Track
-          </a>
-        </div>
+
+      <div class="hidden md:flex items-center space-x-6 text-xs uppercase font-bold tracking-widest text-[#FFD2E1]">
+        <a href="#lineup" class="hover:text-[#39FF14] transition-colors">Lineup & Tickets</a>
+        <a href="#sponsors" class="hover:text-[#39FF14] transition-colors">Sponsors</a>
+        <a href="#contest" class="hover:text-[#39FF14] transition-colors">Meet & Greet</a>
+        <a href="https://maps.app.goo.gl/6MrFUyDMXawU311L8" target="_blank"
+          class="hover:text-[#39FF14] transition-colors">📍 Venue Map</a>
+      </div>
+
+      <div class="flex items-center gap-3">
+        <a href="/auth/login"
+          class="px-4 py-2 bg-[#FF007F] hover:bg-[#E6399B] text-xs font-bold text-white uppercase tracking-wider rounded-full shadow-[0_0_12px_#FF007F] transition-all">OTP
+          Login</a>
       </div>
     </div>
   </nav>
 
-  <!-- Hero Section -->
-  <header class="hero-wrapper py-5 text-center position-relative overflow-hidden">
-    <div class="container py-4">
-      <div class="row justify-content-center">
-        <div class="col-lg-9">
-          <span class="badge bg-warning text-dark px-3 py-2 rounded-pill fw-bold text-uppercase tracking-wider mb-3">
-            <i class="bi bi-mic-fill me-1"></i> Music Creator Hub
-          </span>
-          <h1 class="display-4 fw-extrabold text-light mb-3">
-            Acoustic Showcase & <span class="text-warning">Collab Network</span>
-          </h1>
-          <p class="lead text-secondary mb-4 mx-auto" style="max-width: 680px;">
-            Listen to raw acoustic covers, original demos, and jam sessions. Connect with vocalists, guitarists, and producers to create your next release.
-          </p>
+  <!-- HERO SECTION WITH CANVAS PARTICLE ENGINE -->
+  <header class="relative min-h-[85vh] flex flex-col items-center justify-center text-center px-4 overflow-hidden">
+    <!-- 35+ Particle Canvas -->
+    <canvas id="particle-canvas" class="absolute inset-0 w-full h-full pointer-events-none opacity-60 z-0"></canvas>
 
-          <!-- Hero Quick Stats -->
-          <div class="d-flex flex-wrap align-items-center justify-content-center gap-4 py-3 mb-4">
-            <div class="stat-pill bg-dark border border-secondary px-4 py-2 rounded-pill d-flex align-items-center gap-2">
-              <i class="bi bi-music-note-beamed text-warning fs-4"></i>
-              <div class="text-start">
-                <div class="fw-bold text-light lh-1">4</div>
-                <small class="text-muted" style="font-size: 0.75rem;">Tracks Shared</small>
-              </div>
-            </div>
-            <div class="stat-pill bg-dark border border-secondary px-4 py-2 rounded-pill d-flex align-items-center gap-2">
-              <i class="bi bi-people-fill text-info fs-4"></i>
-              <div class="text-start">
-                <div class="fw-bold text-light lh-1">2</div>
-                <small class="text-muted" style="font-size: 0.75rem;">Collab Calls</small>
-              </div>
-            </div>
-            <div class="stat-pill bg-dark border border-secondary px-4 py-2 rounded-pill d-flex align-items-center gap-2">
-              <i class="bi bi-heart-fill text-danger fs-4"></i>
-              <div class="text-start">
-                <div class="fw-bold text-light lh-1">124</div>
-                <small class="text-muted" style="font-size: 0.75rem;">Total Likes</small>
-              </div>
-            </div>
-          </div>
+    <!-- Ambient Neon Background Glows -->
+    <div class="absolute w-[600px] h-[600px] bg-[#FF007F] opacity-20 blur-[160px] rounded-full pointer-events-none">
+    </div>
+    <div
+      class="absolute w-[450px] h-[450px] bg-[#00F0FF] opacity-15 blur-[140px] rounded-full pointer-events-none -top-20 right-10">
+    </div>
 
-          <!-- Hero Action Buttons -->
-          <div class="d-flex justify-content-center gap-3">
-            <a href="#tracks-section" class="btn btn-warning btn-lg fw-bold rounded-pill px-4 shadow">
-              <i class="bi bi-play-circle-fill me-1"></i> Explore Tracks
-            </a>
-            <a href="#collab-section" class="btn btn-outline-light btn-lg rounded-pill px-4">
-              <i class="bi bi-mic me-1"></i> Post Collab Call
-            </a>
-          </div>
-        </div>
-      </div>
+    <span
+      class="z-10 px-4 py-1.5 bg-[#FF007F]/20 text-[#39FF14] border border-[#39FF14]/40 rounded-full text-xs font-bold uppercase tracking-widest mb-4">
+      📍 NICE Grounds, Bengaluru • 27 July – 03 Aug 2026
+    </span>
+
+    <h1 class="z-10 font-bebas text-7xl sm:text-9xl text-[#FFD2E1] glow-pink tracking-tight leading-none">
+      ECHOSPACE FESTIVAL
+    </h1>
+
+    <p class="z-10 text-[#C994A7] text-sm sm:text-lg max-w-2xl mt-4">
+      India's largest concert arena featuring A.R. Rahman, Coldplay, Ed Sheeran, Justin Bieber, Maroon 5, Arijit Singh &
+      more live at <a href="https://maps.app.goo.gl/6MrFUyDMXawU311L8" target="_blank"
+        class="text-[#39FF14] underline font-bold">NICE Grounds</a>.
+    </p>
+
+    <div class="z-10 flex flex-wrap justify-center gap-4 mt-8">
+      <a href="#lineup"
+        class="px-8 py-3.5 bg-[#FF007F] hover:bg-[#E6399B] text-white font-bold rounded-full uppercase tracking-widest shadow-[0_0_20px_#FF007F] transition-all">
+        Book Tickets (from ₹2,000)
+      </a>
+      <a href="https://maps.app.goo.gl/6MrFUyDMXawU311L8" target="_blank"
+        class="px-8 py-3.5 bg-[#350B42] hover:bg-[#FF007F]/40 text-[#FFD2E1] border border-[#FF007F]/40 font-bold rounded-full uppercase tracking-widest transition-all">
+        📍 Get Venue Location
+      </a>
     </div>
   </header>
 
-  <!-- Main Content Container -->
-  <main class="container py-5">
-    
-    <!-- Tracks Showcase Section Header & Filter Controls -->
-    <section id="tracks-section" class="mb-5">
-      <div class="d-flex flex-column flex-md-row align-items-md-center justify-content-between gap-3 mb-4">
+  <!-- SPONSORS RIBBON -->
+  <section id="sponsors" class="py-8 bg-[#17021D] border-y border-[#FF007F]/20 overflow-hidden">
+    <div class="max-w-7xl mx-auto px-4 text-center">
+      <p class="text-xs uppercase font-bold text-[#C994A7] tracking-widest mb-6">OFFICIAL SPONSORS & PARTNERS</p>
+      
+      <div class="flex flex-wrap justify-center items-center gap-4 sm:gap-6">
+        <!-- 1st Image: Jio -->
+        <div class="bg-white/95 hover:bg-white p-2.5 sm:p-3 rounded-2xl border border-[#FF007F]/30 shadow-[0_0_15px_rgba(255,0,127,0.2)] hover:scale-105 hover:shadow-[0_0_20px_#FF007F] transition-all flex items-center justify-center h-14 sm:h-16 px-4">
+          <img src="/images/sponsors/jio.png" alt="Jio" class="max-h-full object-contain">
+        </div>
+
+        <!-- 2nd Image: Airtel -->
+        <div class="bg-white/95 hover:bg-white p-2.5 sm:p-3 rounded-2xl border border-[#FF007F]/30 shadow-[0_0_15px_rgba(255,0,127,0.2)] hover:scale-105 hover:shadow-[0_0_20px_#FF007F] transition-all flex items-center justify-center h-14 sm:h-16 px-4">
+          <img src="/images/sponsors/airtel.png" alt="Airtel" class="max-h-full object-contain">
+        </div>
+
+        <!-- 3rd Image: Blinkit -->
+        <div class="bg-white/95 hover:bg-white p-2.5 sm:p-3 rounded-2xl border border-[#FF007F]/30 shadow-[0_0_15px_rgba(255,0,127,0.2)] hover:scale-105 hover:shadow-[0_0_20px_#FF007F] transition-all flex items-center justify-center h-14 sm:h-16 px-4">
+          <img src="/images/sponsors/blinkit.png" alt="Blinkit" class="max-h-full object-contain">
+        </div>
+
+        <!-- 4th Image: Zepto -->
+        <div class="bg-white/95 hover:bg-white p-2.5 sm:p-3 rounded-2xl border border-[#FF007F]/30 shadow-[0_0_15px_rgba(255,0,127,0.2)] hover:scale-105 hover:shadow-[0_0_20px_#FF007F] transition-all flex items-center justify-center h-14 sm:h-16 px-4">
+          <img src="/images/sponsors/zepto.png" alt="Zepto" class="max-h-full object-contain">
+        </div>
+
+        <!-- 5th Image: Instamart -->
+        <div class="bg-white/95 hover:bg-white p-2.5 sm:p-3 rounded-2xl border border-[#FF007F]/30 shadow-[0_0_15px_rgba(255,0,127,0.2)] hover:scale-105 hover:shadow-[0_0_20px_#FF007F] transition-all flex items-center justify-center h-14 sm:h-16 px-4">
+          <img src="/images/sponsors/instamart.png" alt="Instamart" class="max-h-full object-contain">
+        </div>
+
+        <!-- 6th Image: Starbucks -->
+        <div class="bg-white/95 hover:bg-white p-2.5 sm:p-3 rounded-2xl border border-[#FF007F]/30 shadow-[0_0_15px_rgba(255,0,127,0.2)] hover:scale-105 hover:shadow-[0_0_20px_#FF007F] transition-all flex items-center justify-center h-14 sm:h-16 px-4">
+          <img src="/images/sponsors/starbucks.png" alt="Starbucks" class="max-h-full object-contain">
+        </div>
+
+        <!-- 7th Image: IndiGo -->
+        <div class="bg-white/95 hover:bg-white p-2.5 sm:p-3 rounded-2xl border border-[#FF007F]/30 shadow-[0_0_15px_rgba(255,0,127,0.2)] hover:scale-105 hover:shadow-[0_0_20px_#FF007F] transition-all flex items-center justify-center h-14 sm:h-16 px-4">
+          <img src="/images/sponsors/indigo.png" alt="IndiGo" class="max-h-full object-contain">
+        </div>
+
+        <!-- 8th Image: Qatar Airways -->
+        <div class="bg-white/95 hover:bg-white p-2.5 sm:p-3 rounded-2xl border border-[#FF007F]/30 shadow-[0_0_15px_rgba(255,0,127,0.2)] hover:scale-105 hover:shadow-[0_0_20px_#FF007F] transition-all flex items-center justify-center h-14 sm:h-16 px-4">
+          <img src="/images/sponsors/qatar_airways.png" alt="Qatar Airways" class="max-h-full object-contain">
+        </div>
+
+        <!-- 9th Image: Akasa Air -->
+        <div class="bg-white/95 hover:bg-white p-2.5 sm:p-3 rounded-2xl border border-[#FF007F]/30 shadow-[0_0_15px_rgba(255,0,127,0.2)] hover:scale-105 hover:shadow-[0_0_20px_#FF007F] transition-all flex items-center justify-center h-14 sm:h-16 px-4">
+          <img src="/images/sponsors/akasa_air.png" alt="Akasa Air" class="max-h-full object-contain">
+        </div>
+
+        <!-- 10th Image: Pizza Hut -->
+        <div class="bg-white/95 hover:bg-white p-2.5 sm:p-3 rounded-2xl border border-[#FF007F]/30 shadow-[0_0_15px_rgba(255,0,127,0.2)] hover:scale-105 hover:shadow-[0_0_20px_#FF007F] transition-all flex items-center justify-center h-14 sm:h-16 px-4">
+          <img src="/images/sponsors/pizza_hut.png" alt="Pizza Hut" class="max-h-full object-contain">
+        </div>
+
+        <!-- 11th Image: Domino's -->
+        <div class="bg-white/95 hover:bg-white p-2.5 sm:p-3 rounded-2xl border border-[#FF007F]/30 shadow-[0_0_15px_rgba(255,0,127,0.2)] hover:scale-105 hover:shadow-[0_0_20px_#FF007F] transition-all flex items-center justify-center h-14 sm:h-16 px-4">
+          <img src="/images/sponsors/dominos.png" alt="Domino's" class="max-h-full object-contain">
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- LINEUP & SCHEDULE GRID -->
+  <section id="lineup" class="py-16 max-w-7xl mx-auto px-4">
+    <div class="text-center mb-12">
+      <h2 class="font-bebas text-5xl sm:text-6xl text-[#FFD2E1] tracking-wide">OFFICIAL SCHEDULE & STAGE LINEUP</h2>
+      <p class="text-[#C994A7] text-sm">Select your concert to lock in General Admission or VIP Passes.</p>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+
+      <!-- ARTIST 1 & 2 (JULY 27) -->
+      <div
+        class="glass-card rounded-2xl overflow-hidden p-5 flex flex-col justify-between hover:border-[#FF007F] transition-all">
+        <img src="https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?w=600" alt="AR Rahman & Maroon 5"
+          class="w-full h-48 object-cover rounded-xl mb-4">
         <div>
-          <h2 class="h3 fw-bold text-light mb-1 d-flex align-items-center gap-2">
-            <i class="bi bi-disc-fill text-warning"></i> Acoustic Tracks Showcase
-          </h2>
-          <p class="text-muted small mb-0">Discover community recordings, acoustic arrangements, and fresh snippets</p>
+          <span class="text-xs font-bold text-[#39FF14] uppercase">STAGE A & B • 27 JULY (6 PM - 10 PM)</span>
+          <h3 class="font-bebas text-3xl text-white mt-1">AR RAHMAN & MAROON 5</h3>
+          <p class="text-xs text-[#C994A7] my-2">Dual stage opening night spectacle live at NICE Grounds.</p>
         </div>
-
-        <!-- Search Form -->
-        <form action="/" method="GET" class="d-flex gap-2" style="max-width: 380px; width: 100%;">
-          <div class="input-group">
-            <span class="input-group-text bg-dark border-secondary text-secondary">
-              <i class="bi bi-search"></i>
-            </span>
-            <input type="text" name="search" class="form-control echo-input" placeholder="Search track or artist...">
-            <button class="btn btn-warning fw-bold" type="submit">Search</button>
-          </div>
-        </form>
+        <button onclick="openBooking('AR Rahman & Maroon 5', '27 July 2026')"
+          class="w-full mt-4 py-2.5 bg-[#FF007F] hover:bg-[#E6399B] text-white font-bold rounded-lg uppercase tracking-wider text-xs shadow-[0_0_15px_#FF007F] transition-all">
+          Buy Ticket (from ₹2,000)
+        </button>
       </div>
 
-      <!-- Category Filter Pills -->
-      <div class="d-flex flex-wrap gap-2 mb-4 pb-2 border-bottom border-secondary">
-        <a href="/" class="btn btn-sm rounded-pill px-3 btn-warning text-dark fw-bold">
-          <i class="bi bi-grid-fill me-1"></i> All Tracks
-        </a>
-        <a href="/?category=Acoustic+Cover" class="btn btn-sm rounded-pill px-3 btn-outline-secondary text-light">
-          <i class="bi bi-guitar me-1"></i> Acoustic Cover
-        </a>
-        <a href="/?category=Original+Song" class="btn btn-sm rounded-pill px-3 btn-outline-secondary text-light">
-          <i class="bi bi-music-note-list me-1"></i> Original Song
-        </a>
-        <a href="/?category=Jam+Session" class="btn btn-sm rounded-pill px-3 btn-outline-secondary text-light">
-          <i class="bi bi-sliders me-1"></i> Jam Session
-        </a>
-        <a href="/?category=Snippet" class="btn btn-sm rounded-pill px-3 btn-outline-secondary text-light">
-          <i class="bi bi-lightning-charge me-1"></i> Snippet
-        </a>
+      <!-- ARTIST 3 (JULY 28) -->
+      <div
+        class="glass-card rounded-2xl overflow-hidden p-5 flex flex-col justify-between hover:border-[#FF007F] transition-all">
+        <img src="https://images.unsplash.com/photo-1470225620780-dba8ba36b745?w=600" alt="Justin Bieber"
+          class="w-full h-48 object-cover rounded-xl mb-4">
+        <div>
+          <span class="text-xs font-bold text-[#39FF14] uppercase">MAIN STAGE • 28 JULY (6 PM - 10 PM)</span>
+          <h3 class="font-bebas text-3xl text-white mt-1">JUSTIN BIEBER</h3>
+          <p class="text-xs text-[#C994A7] my-2">Justice World Tour arena stop in Bengaluru.</p>
+        </div>
+        <button onclick="openBooking('Justin Bieber', '28 July 2026')"
+          class="w-full mt-4 py-2.5 bg-[#FF007F] hover:bg-[#E6399B] text-white font-bold rounded-lg uppercase tracking-wider text-xs shadow-[0_0_15px_#FF007F] transition-all">
+          Buy Ticket (from ₹2,000)
+        </button>
       </div>
 
-      <!-- Tracks Grid -->
-      <div class="row g-4">
-
-        <!-- Track 1 -->
-        <div class="col-lg-6 col-md-6 col-12">
-          <div class="card track-card h-100 shadow-sm position-relative overflow-hidden">
-            <div class="card-header card-header-gradient p-3 d-flex align-items-center justify-content-between">
-              <div class="d-flex align-items-center gap-2 overflow-hidden me-2">
-                <div class="avatar-box bg-dark text-warning rounded-circle d-flex align-items-center justify-content-center flex-shrink-0" style="width: 40px; height: 40px; border: 1px solid var(--echo-border-dark);">
-                  <i class="bi bi-vinyl fs-5"></i>
-                </div>
-                <div class="text-truncate">
-                  <h5 class="card-title text-light fw-bold mb-0 text-truncate">Midnight Strum & Melody</h5>
-                  <span class="text-warning small fw-semibold">
-                    <i class="bi bi-person-fill me-1"></i>Maya Lin
-                  </span>
-                </div>
-              </div>
-              <span class="badge badge-category-original-song rounded-pill px-3 py-2 flex-shrink-0">
-                Original Song
-              </span>
-            </div>
-
-            <div class="card-body bg-secondary bg-opacity-10 p-3 d-flex flex-column justify-content-between">
-              <p class="card-text text-secondary small mb-3">
-                A cozy fingerstyle acoustic track recorded in Standard E tuning with Neumann KM184 mics.
-              </p>
-
-              <!-- Embedded Audio Player -->
-              <div class="audio-player-wrapper mb-3 bg-dark p-2 rounded-3 border border-secondary">
-                <audio controls class="w-100" preload="metadata">
-                  <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
-                  Your browser does not support HTML5 audio.
-                </audio>
-              </div>
-
-              <!-- Tags & Interactive Like Action -->
-              <div class="d-flex align-items-center justify-content-between pt-2 border-top border-secondary">
-                <div class="tags-container d-flex flex-wrap gap-1">
-                  <span class="badge bg-dark text-secondary border border-secondary" style="font-size: 0.7rem;">#fingerstyle</span>
-                  <span class="badge bg-dark text-secondary border border-secondary" style="font-size: 0.7rem;">#acoustic</span>
-                  <span class="badge bg-dark text-secondary border border-secondary" style="font-size: 0.7rem;">#chill</span>
-                </div>
-                <button class="btn btn-sm btn-like rounded-pill px-3 py-1 d-flex align-items-center gap-2" data-track-id="1">
-                  <i class="bi bi-heart text-danger"></i>
-                  <span class="fw-bold like-count">42</span>
-                </button>
-              </div>
-            </div>
-
-            <div class="card-footer bg-dark border-0 text-muted small px-3 py-2 d-flex justify-content-between align-items-center">
-              <span style="font-size: 0.75rem;"><i class="bi bi-calendar3 me-1"></i>Jul 20, 2026</span>
-              <a href="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" target="_blank" rel="noopener noreferrer" class="text-secondary text-hover-warning text-decoration-none" style="font-size: 0.75rem;">
-                Direct Link <i class="bi bi-box-arrow-up-right ms-1"></i>
-              </a>
-            </div>
-          </div>
+      <!-- ARTIST 4 (JULY 29) -->
+      <div
+        class="glass-card rounded-2xl overflow-hidden p-5 flex flex-col justify-between hover:border-[#FF007F] transition-all">
+        <img src="https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?w=600" alt="Shreya Ghoshal"
+          class="w-full h-48 object-cover rounded-xl mb-4">
+        <div>
+          <span class="text-xs font-bold text-[#39FF14] uppercase">MAIN STAGE • 29 JULY (6 PM - 10 PM)</span>
+          <h3 class="font-bebas text-3xl text-white mt-1">SHREYA GHOSHAL</h3>
+          <p class="text-xs text-[#C994A7] my-2">Symphonic melody night with grand live orchestra.</p>
         </div>
-
-        <!-- Track 2 -->
-        <div class="col-lg-6 col-md-6 col-12">
-          <div class="card track-card h-100 shadow-sm position-relative overflow-hidden">
-            <div class="card-header card-header-gradient p-3 d-flex align-items-center justify-content-between">
-              <div class="d-flex align-items-center gap-2 overflow-hidden me-2">
-                <div class="avatar-box bg-dark text-warning rounded-circle d-flex align-items-center justify-content-center flex-shrink-0" style="width: 40px; height: 40px; border: 1px solid var(--echo-border-dark);">
-                  <i class="bi bi-vinyl fs-5"></i>
-                </div>
-                <div class="text-truncate">
-                  <h5 class="card-title text-light fw-bold mb-0 text-truncate">Sunset Boulevard (Acoustic Cover)</h5>
-                  <span class="text-warning small fw-semibold">
-                    <i class="bi bi-person-fill me-1"></i>Leo Vance
-                  </span>
-                </div>
-              </div>
-              <span class="badge badge-category-acoustic-cover rounded-pill px-3 py-2 flex-shrink-0">
-                Acoustic Cover
-              </span>
-            </div>
-
-            <div class="card-body bg-secondary bg-opacity-10 p-3 d-flex flex-column justify-content-between">
-              <p class="card-text text-secondary small mb-3">
-                Stripped-back acoustic guitar cover featuring warm natural room reverb and soft vocal backing.
-              </p>
-
-              <!-- Embedded Audio Player -->
-              <div class="audio-player-wrapper mb-3 bg-dark p-2 rounded-3 border border-secondary">
-                <audio controls class="w-100" preload="metadata">
-                  <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3" type="audio/mpeg">
-                  Your browser does not support HTML5 audio.
-                </audio>
-              </div>
-
-              <!-- Tags & Interactive Like Action -->
-              <div class="d-flex align-items-center justify-content-between pt-2 border-top border-secondary">
-                <div class="tags-container d-flex flex-wrap gap-1">
-                  <span class="badge bg-dark text-secondary border border-secondary" style="font-size: 0.7rem;">#cover</span>
-                  <span class="badge bg-dark text-secondary border border-secondary" style="font-size: 0.7rem;">#indie</span>
-                  <span class="badge bg-dark text-secondary border border-secondary" style="font-size: 0.7rem;">#guitar</span>
-                </div>
-                <button class="btn btn-sm btn-like rounded-pill px-3 py-1 d-flex align-items-center gap-2" data-track-id="2">
-                  <i class="bi bi-heart text-danger"></i>
-                  <span class="fw-bold like-count">28</span>
-                </button>
-              </div>
-            </div>
-
-            <div class="card-footer bg-dark border-0 text-muted small px-3 py-2 d-flex justify-content-between align-items-center">
-              <span style="font-size: 0.75rem;"><i class="bi bi-calendar3 me-1"></i>Jul 20, 2026</span>
-              <a href="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3" target="_blank" rel="noopener noreferrer" class="text-secondary text-hover-warning text-decoration-none" style="font-size: 0.75rem;">
-                Direct Link <i class="bi bi-box-arrow-up-right ms-1"></i>
-              </a>
-            </div>
-          </div>
-        </div>
-
+        <button onclick="openBooking('Shreya Ghoshal', '29 July 2026')"
+          class="w-full mt-4 py-2.5 bg-[#FF007F] hover:bg-[#E6399B] text-white font-bold rounded-lg uppercase tracking-wider text-xs shadow-[0_0_15px_#FF007F] transition-all">
+          Buy Ticket (from ₹2,000)
+        </button>
       </div>
-    </section>
 
-    <!-- Collaboration Board Section -->
-    <section id="collab-section" class="pt-4">
-      <div class="row g-4 align-items-start">
-        
-        <!-- Left Column: Active Collab Calls Display -->
-        <div class="col-lg-7">
-          <div class="d-flex align-items-center justify-content-between mb-4">
-            <div>
-              <h3 class="h4 fw-bold text-light mb-1 d-flex align-items-center gap-2">
-                <i class="bi bi-people-fill text-info"></i> Open Collaboration Calls
-              </h3>
-              <p class="text-muted small mb-0">Connect with fellow musicians looking for talent</p>
-            </div>
-            <span class="badge bg-info text-dark rounded-pill px-3 py-2 fw-bold">2 Active</span>
-          </div>
+      <!-- ARTIST 5 (JULY 30) -->
+      <div
+        class="glass-card rounded-2xl overflow-hidden p-5 flex flex-col justify-between hover:border-[#FF007F] transition-all">
+        <img src="https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=600" alt="Anuv Jain"
+          class="w-full h-48 object-cover rounded-xl mb-4">
+        <div>
+          <span class="text-xs font-bold text-[#39FF14] uppercase">ACOUSTIC ARENA • 30 JULY (6 PM - 10 PM)</span>
+          <h3 class="font-bebas text-3xl text-white mt-1">ANUV JAIN</h3>
+          <p class="text-xs text-[#C994A7] my-2">Intimate indie acoustic night under the stars.</p>
+        </div>
+        <button onclick="openBooking('Anuv Jain', '30 July 2026')"
+          class="w-full mt-4 py-2.5 bg-[#FF007F] hover:bg-[#E6399B] text-white font-bold rounded-lg uppercase tracking-wider text-xs shadow-[0_0_15px_#FF007F] transition-all">
+          Buy Ticket (from ₹2,000)
+        </button>
+      </div>
 
-          <div class="row g-3">
-            <div class="col-12">
-              <div class="card collab-card p-3 shadow-sm">
-                <div class="d-flex align-items-start justify-content-between mb-2">
-                  <div>
-                    <h6 class="text-light fw-bold mb-1">Indie Folk Single</h6>
-                    <span class="small text-info">
-                      <i class="bi bi-person-circle me-1"></i>Sarah Jenkins &bull; 
-                      <span class="text-warning fw-semibold">Vocalist Needed</span>
-                    </span>
-                  </div>
-                  <span class="badge status-badge-open rounded-pill px-3 py-1">Open</span>
-                </div>
+      <!-- ARTIST 6 (JULY 31) -->
+      <div
+        class="glass-card rounded-2xl overflow-hidden p-5 flex flex-col justify-between hover:border-[#FF007F] transition-all">
+        <img src="https://images.unsplash.com/photo-1520523839897-bd0b52f945a0?w=600" alt="Ed Sheeran"
+          class="w-full h-48 object-cover rounded-xl mb-4">
+        <div>
+          <span class="text-xs font-bold text-[#39FF14] uppercase">MAIN STAGE • 31 JULY (6 PM - 10 PM)</span>
+          <h3 class="font-bebas text-3xl text-white mt-1">ED SHEERAN</h3>
+          <p class="text-xs text-[#C994A7] my-2">+-=÷x Mathematics Tour Live setup.</p>
+        </div>
+        <button onclick="openBooking('Ed Sheeran', '31 July 2026')"
+          class="w-full mt-4 py-2.5 bg-[#FF007F] hover:bg-[#E6399B] text-white font-bold rounded-lg uppercase tracking-wider text-xs shadow-[0_0_15px_#FF007F] transition-all">
+          Buy Ticket (from ₹2,000)
+        </button>
+      </div>
 
-                <p class="card-text text-secondary small mb-3 bg-dark p-2 rounded border border-secondary">
-                  "Looking for a soulful female or male vocalist for an acoustic indie song. Key of D, 95 BPM. Demo available!"
-                </p>
+      <!-- ARTIST 7 (AUG 1) -->
+      <div
+        class="glass-card rounded-2xl overflow-hidden p-5 flex flex-col justify-between hover:border-[#FF007F] transition-all">
+        <img src="https://images.unsplash.com/photo-1492684223066-81342ee5ff30?w=600" alt="Coldplay"
+          class="w-full h-48 object-cover rounded-xl mb-4">
+        <div>
+          <span class="text-xs font-bold text-[#39FF14] uppercase">GRAND STAGE • 01 AUG (6 PM - 10 PM)</span>
+          <h3 class="font-bebas text-3xl text-white mt-1">COLDPLAY</h3>
+          <p class="text-xs text-[#C994A7] my-2">Music of the Spheres Stadium Experience & LED Wristbands.</p>
+        </div>
+        <button onclick="openBooking('Coldplay', '01 August 2026')"
+          class="w-full mt-4 py-2.5 bg-[#FF007F] hover:bg-[#E6399B] text-white font-bold rounded-lg uppercase tracking-wider text-xs shadow-[0_0_15px_#FF007F] transition-all">
+          Buy Ticket (from ₹2,000)
+        </button>
+      </div>
 
-                <div class="d-flex align-items-center justify-content-between text-muted small" style="font-size: 0.75rem;">
-                  <span><i class="bi bi-clock me-1"></i>Posted Jul 20, 2026</span>
-                  <a href="mailto:sarah.vocals@example.com" class="btn btn-outline-info btn-sm rounded-pill px-3 text-light" style="font-size: 0.75rem;">
-                    <i class="bi bi-envelope-fill me-1"></i> Contact Sarah Jenkins
-                  </a>
-                </div>
-              </div>
-            </div>
-          </div>
+      <!-- ARTIST 8 (AUG 2) -->
+      <div
+        class="glass-card rounded-2xl overflow-hidden p-5 flex flex-col justify-between hover:border-[#FF007F] transition-all">
+        <img src="https://images.unsplash.com/photo-1508700115892-45ecd05ae2ad?w=600" alt="Alan Walker"
+          class="w-full h-48 object-cover rounded-xl mb-4">
+        <div>
+          <span class="text-xs font-bold text-[#39FF14] uppercase">EDM DOME • 02 AUG (6 PM - 10 PM)</span>
+          <h3 class="font-bebas text-3xl text-white mt-1">ALAN WALKER</h3>
+          <p class="text-xs text-[#C994A7] my-2">WalkerWorld laser lights & electronic dance show.</p>
+        </div>
+        <button onclick="openBooking('Alan Walker', '02 August 2026')"
+          class="w-full mt-4 py-2.5 bg-[#FF007F] hover:bg-[#E6399B] text-white font-bold rounded-lg uppercase tracking-wider text-xs shadow-[0_0_15px_#FF007F] transition-all">
+          Buy Ticket (from ₹2,000)
+        </button>
+      </div>
+
+      <!-- ARTIST 9 (AUG 3) -->
+      <div
+        class="glass-card rounded-2xl overflow-hidden p-5 flex flex-col justify-between hover:border-[#FF007F] transition-all">
+        <img src="https://images.unsplash.com/photo-1465847899084-d164df4dedc6?w=600" alt="Arijit Singh"
+          class="w-full h-48 object-cover rounded-xl mb-4">
+        <div>
+          <span class="text-xs font-bold text-[#39FF14] uppercase">GRAND FINALE • 03 AUG (6 PM - 10 PM)</span>
+          <h3 class="font-bebas text-3xl text-white mt-1">ARIJIT SINGH</h3>
+          <p class="text-xs text-[#C994A7] my-2">Grand finale night with full orchestra & laser show.</p>
+        </div>
+        <button onclick="openBooking('Arijit Singh', '03 August 2026')"
+          class="w-full mt-4 py-2.5 bg-[#FF007F] hover:bg-[#E6399B] text-white font-bold rounded-lg uppercase tracking-wider text-xs shadow-[0_0_15px_#FF007F] transition-all">
+          Buy Ticket (from ₹2,000)
+        </button>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- LUCKY DRAW CONTEST & MEET & GREET SECTION -->
+  <section id="contest" class="py-16 bg-[#17021D] border-t border-[#FF007F]/20">
+    <div class="max-w-3xl mx-auto px-4 text-center">
+      <span class="px-3 py-1 bg-[#39FF14]/20 text-[#39FF14] text-xs font-bold rounded-full uppercase">EXCLUSIVE
+        PASS</span>
+      <h2 class="font-bebas text-5xl text-white mt-2">WIN EXCLUSIVE MERCH & ARTIST MEET-AND-GREET</h2>
+      <p class="text-[#C994A7] text-xs sm:text-sm mb-8">Enter the EchoSpace lucky draw to win official tour hoodies and
+        a photo pass with your favorite artist on show day!</p>
+
+      <form id="contest-form" onsubmit="handleContest(event)" class="glass-card p-6 rounded-2xl text-left space-y-4">
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <input type="text" id="cName" placeholder="Full Name" required
+            class="w-full p-3 bg-[#1D0324] border border-[#FF007F]/30 rounded-lg text-white text-xs focus:outline-none focus:border-[#39FF14]">
+          <input type="text" id="cContact" placeholder="Mobile Number or Gmail" required
+            class="w-full p-3 bg-[#1D0324] border border-[#FF007F]/30 rounded-lg text-white text-xs focus:outline-none focus:border-[#39FF14]">
+        </div>
+        <select id="cArtist" required
+          class="w-full p-3 bg-[#1D0324] border border-[#FF007F]/30 rounded-lg text-white text-xs focus:outline-none focus:border-[#39FF14]">
+          <option value="">Select Favorite Artist for Meet & Greet</option>
+          <option value="AR Rahman & Maroon 5">AR Rahman & Maroon 5 (27 July)</option>
+          <option value="Justin Bieber">Justin Bieber (28 July)</option>
+          <option value="Shreya Ghoshal">Shreya Ghoshal (29 July)</option>
+          <option value="Anuv Jain">Anuv Jain (30 July)</option>
+          <option value="Ed Sheeran">Ed Sheeran (31 July)</option>
+          <option value="Coldplay">Coldplay (01 Aug)</option>
+          <option value="Alan Walker">Alan Walker (02 Aug)</option>
+          <option value="Arijit Singh">Arijit Singh (03 Aug)</option>
+        </select>
+        <textarea id="cReason" rows="3" placeholder="Why do you deserve the photo pass?" required
+          class="w-full p-3 bg-[#1D0324] border border-[#FF007F]/30 rounded-lg text-white text-xs focus:outline-none focus:border-[#39FF14]"></textarea>
+
+        <button type="submit"
+          class="w-full py-3 bg-[#39FF14] hover:bg-[#2ed60f] text-black font-bold uppercase text-xs rounded-lg tracking-wider transition-all">
+          Submit Lucky Entry
+        </button>
+      </form>
+      <div id="contest-alert"
+        class="hidden mt-4 p-3 bg-[#39FF14]/20 border border-[#39FF14] text-[#39FF14] rounded-lg text-xs font-bold">
+      </div>
+    </div>
+  </section>
+
+  <!-- BOOKING & UPI PAYMENT MODAL -->
+  <div id="booking-modal"
+    class="hidden fixed inset-0 bg-black/80 backdrop-blur-md z-50 flex items-center justify-center p-4">
+    <div class="glass-card max-w-md w-full p-6 rounded-2xl relative">
+      <button onclick="closeBooking()" class="absolute top-4 right-4 text-white text-xl hover:text-[#FF007F]">✕</button>
+
+      <h3 id="modal-artist" class="font-bebas text-3xl text-white">BOOK TICKETS</h3>
+      <p id="modal-date" class="text-xs text-[#39FF14] mb-4"></p>
+
+      <div class="space-y-4 text-xs">
+        <div>
+          <label class="block text-[#C994A7] mb-1">Your Name</label>
+          <input type="text" id="bName" placeholder="Full Name"
+            class="w-full p-2.5 bg-[#1D0324] border border-[#FF007F]/30 rounded-lg text-white focus:outline-none focus:border-[#39FF14]">
         </div>
 
-        <!-- Right Column: Collaboration Request Form -->
-        <div class="col-lg-5">
-          <div class="card border-secondary bg-dark text-light p-4 rounded-4 shadow">
-            <h4 class="h5 fw-bold text-warning mb-3 d-flex align-items-center gap-2">
-              <i class="bi bi-mic-fill"></i> Post a Collab Request
-            </h4>
-            <p class="text-muted small mb-4">Are you looking for a singer, guitarist, or producer? Submit your callout to the hub.</p>
+        <div>
+          <label class="block text-[#C994A7] mb-1">Email or Mobile Number</label>
+          <input type="text" id="bContact" placeholder="For E-Ticket delivery"
+            class="w-full p-2.5 bg-[#1D0324] border border-[#FF007F]/30 rounded-lg text-white focus:outline-none focus:border-[#39FF14]">
+        </div>
 
-            <form action="/collab/new" method="POST" class="needs-validation" novalidate>
-              <div class="mb-3">
-                <label for="senderName" class="form-label small text-light fw-semibold">Your Name *</label>
-                <input type="text" class="form-control echo-input" id="senderName" name="senderName" placeholder="e.g., Alex Vance" required>
-              </div>
-
-              <div class="mb-3">
-                <label for="senderEmail" class="form-label small text-light fw-semibold">Your Email *</label>
-                <input type="email" class="form-control echo-input" id="senderEmail" name="senderEmail" placeholder="alex@example.com" required>
-              </div>
-
-              <div class="row g-2 mb-3">
-                <div class="col-md-6">
-                  <label for="role" class="form-label small text-light fw-semibold">Role Needed *</label>
-                  <select class="form-select echo-input" id="role" name="role" required>
-                    <option value="" disabled selected>Select role...</option>
-                    <option value="Vocalist">Vocalist</option>
-                    <option value="Guitarist">Guitarist</option>
-                    <option value="Producer">Producer</option>
-                    <option value="Songwriter">Songwriter</option>
-                    <option value="Other">Other</option>
-                  </select>
-                </div>
-
-                <div class="col-md-6">
-                  <label for="projectType" class="form-label small text-light fw-semibold">Project Type *</label>
-                  <input type="text" class="form-control echo-input" id="projectType" name="projectType" placeholder="e.g. Acoustic EP" required>
-                </div>
-              </div>
-
-              <div class="mb-3">
-                <label for="message" class="form-label small text-light fw-semibold">Project Details & Message *</label>
-                <textarea class="form-control echo-input" id="message" name="message" rows="3" placeholder="Describe your track idea, genre, key, tempo, or what stems you need..." required></textarea>
-              </div>
-
-              <button type="submit" class="btn btn-warning fw-bold w-100 rounded-3 py-2 shadow-sm">
-                <i class="bi bi-send-fill me-1"></i> Publish Collaboration Call
-              </button>
-            </form>
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block text-[#C994A7] mb-1">Ticket Tier</label>
+            <select id="bTier" onchange="updatePrice()"
+              class="w-full p-2.5 bg-[#1D0324] border border-[#FF007F]/30 rounded-lg text-white">
+              <option value="GA">General (₹2,000)</option>
+              <option value="VIP">VIP Pass (₹15,000)</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-[#C994A7] mb-1">Partner Platform</label>
+            <select id="bPlatform" class="w-full p-2.5 bg-[#1D0324] border border-[#FF007F]/30 rounded-lg text-white">
+              <option value="BookMyShow">BookMyShow</option>
+              <option value="District">District</option>
+              <option value="SortMyScene">Sort My Scene</option>
+              <option value="Ticket9">Ticket9</option>
+            </select>
           </div>
         </div>
 
-      </div>
-    </section>
-
-  </main>
-
-  <!-- Footer -->
-  <footer class="bg-dark text-secondary border-top border-secondary py-5 mt-auto">
-    <div class="container">
-      <div class="row g-4 mb-4">
-        <div class="col-lg-5 col-md-6">
-          <div class="d-flex align-items-center gap-2 mb-3">
-            <div class="brand-icon-box bg-warning text-dark rounded-circle d-flex align-items-center justify-content-center" style="width: 32px; height: 32px;">
-              <i class="bi bi-soundwave fs-5"></i>
-            </div>
-            <span class="fs-4 fw-bold text-light">Echo<span class="text-warning">Hub</span></span>
-          </div>
-          <p class="small text-muted mb-3">
-            The premier open showcase and collaboration space for acoustic artists, vocalists, songwriters, and producers worldwide.
-          </p>
+        <!-- Dynamic Total -->
+        <div class="p-3 bg-[#1D0324] rounded-lg border border-[#39FF14]/30 flex justify-between items-center">
+          <span>Total Amount:</span>
+          <span id="bTotal" class="font-bold text-base text-[#39FF14]">₹2,000</span>
         </div>
+
+        <!-- Simulated UPI QR Code -->
+        <div class="text-center py-2">
+          <p class="text-[10px] text-[#C994A7] mb-2">Scan & Pay using PhonePe, Google Pay, or Paytm</p>
+          <img
+            src="https://api.qrserver.com/v1/create-qr-code/?size=130x130&data=upi://pay?pa=echospace@upi&pn=NICEGrounds"
+            class="mx-auto border-2 border-[#FF007F] rounded-lg">
+        </div>
+
+        <button onclick="confirmPayment()"
+          class="w-full py-3 bg-[#39FF14] hover:bg-[#2ed60f] text-black font-bold uppercase rounded-lg transition-all">
+          I Have Paid — Generate E-Ticket
+        </button>
       </div>
-      <hr class="border-secondary my-4">
-      <div class="d-flex flex-column flex-md-row align-items-center justify-content-between small text-muted">
-        <p class="mb-0">&copy; 2026 Echo Showcase Hub. All rights reserved.</p>
-        <p class="mb-0">Powered by <span class="text-warning">Node.js</span>, <span class="text-warning">Express</span>, <span class="text-warning">MongoDB</span> & <span class="text-warning">Bootstrap 5</span></p>
+    </div>
+  </div>
+
+  <!-- E-TICKET POPUP MODAL -->
+  <div id="eticket-modal"
+    class="hidden fixed inset-0 bg-black/90 backdrop-blur-md z-50 flex items-center justify-center p-4">
+    <div class="bg-white text-black max-w-sm w-full p-6 rounded-2xl relative shadow-2xl border-4 border-[#FF007F]">
+      <button onclick="closeETicket()"
+        class="absolute top-2 right-3 text-black font-bold text-lg hover:text-[#FF007F]">✕</button>
+
+      <div class="text-center border-b pb-3 mb-3">
+        <span class="text-[10px] font-bold uppercase bg-black text-white px-2 py-0.5 rounded">OFFICIAL E-TICKET</span>
+        <h3 class="font-bebas text-2xl text-[#1D0324] mt-1">ECHOSPACE FESTIVAL 2026</h3>
+        <p class="text-[10px] text-gray-600">NICE Grounds, Bengaluru</p>
       </div>
+
+      <div class="space-y-1.5 text-xs">
+        <p><strong>Booking ID:</strong> <span id="tID" class="font-mono text-purple-700 font-bold"></span></p>
+        <p><strong>Attendee:</strong> <span id="tName"></span></p>
+        <p><strong>Show:</strong> <span id="tArtist" class="font-bold"></span></p>
+        <p><strong>Date & Time:</strong> <span id="tDate"></span> (6:00 PM Gate Entry)</p>
+        <p><strong>Pass Tier:</strong> <span id="tTier" class="bg-yellow-200 px-1 rounded font-bold"></span></p>
+        <p><strong>Amount Paid:</strong> <span id="tPrice" class="font-bold text-green-700"></span></p>
+      </div>
+
+      <div class="text-center my-4 border-t pt-3">
+        <img id="tQR" src="" class="mx-auto w-28 h-28 border">
+        <p class="text-[9px] text-gray-500 mt-1">Scan at Gate 3 • NICE Grounds Main Entrance</p>
+      </div>
+
+      <button onclick="window.print()"
+        class="w-full py-2 bg-black text-white text-xs font-bold uppercase rounded hover:bg-gray-800 transition-all">
+        🖨️ Download / Print Ticket
+      </button>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer class="py-8 bg-[#130117] border-t border-[#FF007F]/20 text-center text-xs text-[#C994A7]">
+    <div class="max-w-6xl mx-auto px-4 space-y-2">
+      <p class="font-bebas text-2xl text-[#FFD2E1] glow-pink">ECHOSPACE FESTIVAL BENGALURU 2026</p>
+      <p>Venue: NICE Grounds, Tumkur Road, Bengaluru, Karnataka • <a href="https://maps.app.goo.gl/6MrFUyDMXawU311L8"
+          target="_blank" class="text-[#39FF14] underline">View Google Map</a></p>
+      <p>Contact us: (<a href="mailto:echospacemusicfestival2026@email.com" class="text-[#39FF14] underline">echospacemusicfestival2026@email.com</a>) | +91 - 8022334455</p>
+      <p class="text-[10px] opacity-70">Official Ticketing Partners: BookMyShow • District • Sort My Scene • Ticket9</p>
     </div>
   </footer>
 
-  <!-- Bootstrap 5 JS Bundle CDN -->
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
-  <!-- Custom Client JS -->
-  <script src="/js/main.js"></script>
+  <script>
+    // Canvas Particle Animation Engine (40 Floating Neon Particles)
+    const canvas = document.getElementById('particle-canvas');
+    if (canvas) {
+      const ctx = canvas.getContext('2d');
+      let width = canvas.width = canvas.parentElement.offsetWidth;
+      let height = canvas.height = canvas.parentElement.offsetHeight;
+
+      window.addEventListener('resize', () => {
+        if (canvas.parentElement) {
+          width = canvas.width = canvas.parentElement.offsetWidth;
+          height = canvas.height = canvas.parentElement.offsetHeight;
+        }
+      });
+
+      const colors = ['#FF007F', '#39FF14', '#00F0FF', '#FFD2E1'];
+      const particles = Array.from({ length: 40 }, () => ({
+        x: Math.random() * width,
+        y: Math.random() * height,
+        radius: Math.random() * 2.5 + 1,
+        color: colors[Math.floor(Math.random() * colors.length)],
+        vx: (Math.random() - 0.5) * 0.8,
+        vy: (Math.random() - 0.5) * 0.8,
+        alpha: Math.random() * 0.7 + 0.3
+      }));
+
+      function animateParticles() {
+        ctx.clearRect(0, 0, width, height);
+        particles.forEach(p => {
+          p.x += p.vx;
+          p.y += p.vy;
+          if (p.x < 0 || p.x > width) p.vx *= -1;
+          if (p.y < 0 || p.y > height) p.vy *= -1;
+
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+          ctx.fillStyle = p.color;
+          ctx.globalAlpha = p.alpha;
+          ctx.shadowBlur = 10;
+          ctx.shadowColor = p.color;
+          ctx.fill();
+        });
+        requestAnimationFrame(animateParticles);
+      }
+      animateParticles();
+    }
+
+    let selectedArtist = '';
+    let selectedDate = '';
+
+    function openBooking(artist, date) {
+      selectedArtist = artist;
+      selectedDate = date;
+      document.getElementById('modal-artist').innerText = artist;
+      document.getElementById('modal-date').innerText = '📅 ' + date + ' • NICE Grounds, Bengaluru';
+      document.getElementById('booking-modal').classList.remove('hidden');
+    }
+
+    function closeBooking() { document.getElementById('booking-modal').classList.add('hidden'); }
+    function closeETicket() { document.getElementById('eticket-modal').classList.add('hidden'); }
+
+    function updatePrice() {
+      const tier = document.getElementById('bTier').value;
+      document.getElementById('bTotal').innerText = tier === 'VIP' ? '₹15,000' : '₹2,000';
+    }
+
+    async function confirmPayment() {
+      const name = document.getElementById('bName').value.trim();
+      const contact = document.getElementById('bContact').value.trim();
+      const tier = document.getElementById('bTier').value;
+      const platform = document.getElementById('bPlatform').value;
+
+      if (!name || !contact) {
+        alert('Please fill in your name and contact details.');
+        return;
+      }
+
+      const response = await fetch('/api/tickets/book', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          userName: name,
+          userEmailOrPhone: contact,
+          artistName: selectedArtist,
+          eventDate: selectedDate,
+          tier: tier,
+          partnerPlatform: platform
+        })
+      });
+
+      const data = await response.json();
+      if (data.success) {
+        closeBooking();
+        document.getElementById('tID').innerText = data.ticket.bookingId;
+        document.getElementById('tName').innerText = data.ticket.userName;
+        document.getElementById('tArtist').innerText = data.ticket.artistName;
+        document.getElementById('tDate').innerText = data.ticket.eventDate;
+        document.getElementById('tTier').innerText = data.ticket.tier + ' PASS';
+        document.getElementById('tPrice').innerText = '₹' + data.ticket.totalAmount;
+        document.getElementById('tQR').src = data.ticket.qrCodeUrl;
+        document.getElementById('eticket-modal').classList.remove('hidden');
+      } else {
+        alert(data.message || 'Payment processing failed.');
+      }
+    }
+
+    async function handleContest(e) {
+      e.preventDefault();
+      const res = await fetch('/api/contest/entry', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name: document.getElementById('cName').value,
+          emailOrPhone: document.getElementById('cContact').value,
+          favoriteArtist: document.getElementById('cArtist').value,
+          reason: document.getElementById('cReason').value
+        })
+      });
+      const data = await res.json();
+      const alertBox = document.getElementById('contest-alert');
+      alertBox.innerText = data.message;
+      alertBox.classList.remove('hidden');
+      if (data.success) {
+        document.getElementById('contest-form').reset();
+      }
+    }
+  </script>
 </body>
+
 </html>

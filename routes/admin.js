@@ -1,17 +1,23 @@
 const express = require('express');
 const router = express.Router();
-const Track = require('../models/Track');
-const CollabRequest = require('../models/CollabRequest');
+const {
+  getTracks,
+  getAllCollabRequests,
+  addTrack,
+  deleteTrack,
+  updateCollabStatus,
+  deleteCollabRequest
+} = require('../services/dbService');
 
-const CATEGORIES = ['Acoustic Cover', 'Original Song', 'Jam Session', 'Snippet'];
-const ROLES = ['Vocalist', 'Guitarist', 'Producer', 'Songwriter', 'Other'];
+const CATEGORIES = ['Acoustic Cover', 'Original Song', 'Jam Session', 'Festival Snippet'];
+const ROLES = ['Vocalist', 'Guitarist', 'Producer', 'Songwriter', 'Special Guest'];
 const STATUSES = ['Open', 'In Review', 'Accepted', 'Closed'];
 
-// GET /admin - Admin Dashboard Panel
+// GET /admin - Backstage Control Center (Admin Dashboard)
 router.get('/', async (req, res) => {
   try {
-    const tracks = await Track.find().sort({ createdAt: -1 });
-    const collabRequests = await CollabRequest.find().sort({ createdAt: -1 });
+    const tracks = await getTracks();
+    const collabRequests = await getAllCollabRequests();
 
     const message = req.query.msg || null;
     const error = req.query.err || null;
@@ -39,8 +45,8 @@ router.get('/', async (req, res) => {
   }
 });
 
-// POST /admin/tracks/add - Create a New Audio Track
-router.post('/tracks/add', async (req, res) => {
+// POST /admin/tracks/new & /admin/tracks/add - Create a New Audio Track
+const handleAddTrack = async (req, res) => {
   try {
     const { title, artistName, category, audioUrl, description, tags } = req.body;
 
@@ -56,7 +62,7 @@ router.post('/tracks/add', async (req, res) => {
       tagsArray = tags.map(tag => String(tag).trim().replace(/^#/, '')).filter(Boolean);
     }
 
-    await Track.create({
+    await addTrack({
       title: title.trim(),
       artistName: artistName ? artistName.trim() : 'Solo Artist',
       category: CATEGORIES.includes(category) ? category : 'Acoustic Cover',
@@ -70,12 +76,15 @@ router.post('/tracks/add', async (req, res) => {
     console.error('Error adding track:', error);
     res.redirect('/admin?err=' + encodeURIComponent('Failed to create track. Please verify inputs.'));
   }
-});
+};
+
+router.post('/tracks/add', handleAddTrack);
+router.post('/tracks/new', handleAddTrack);
 
 // POST /admin/tracks/:id/delete - Delete a Track
 router.post('/tracks/:id/delete', async (req, res) => {
   try {
-    await Track.findByIdAndDelete(req.params.id);
+    await deleteTrack(req.params.id);
     res.redirect('/admin?msg=' + encodeURIComponent('Track removed successfully.'));
   } catch (error) {
     console.error('Error deleting track:', error);
@@ -91,11 +100,7 @@ router.post('/collab/:id/status', async (req, res) => {
       return res.redirect('/admin?err=' + encodeURIComponent('Invalid status selected.'));
     }
 
-    const updated = await CollabRequest.findByIdAndUpdate(
-      req.params.id,
-      { status },
-      { new: true }
-    );
+    const updated = await updateCollabStatus(req.params.id, status);
 
     if (!updated) {
       return res.redirect('/admin?err=' + encodeURIComponent('Collaboration request not found.'));
@@ -111,7 +116,7 @@ router.post('/collab/:id/status', async (req, res) => {
 // POST /admin/collab/:id/delete - Delete a Collaboration Request
 router.post('/collab/:id/delete', async (req, res) => {
   try {
-    await CollabRequest.findByIdAndDelete(req.params.id);
+    await deleteCollabRequest(req.params.id);
     res.redirect('/admin?msg=' + encodeURIComponent('Collaboration request deleted.'));
   } catch (error) {
     console.error('Error deleting collab request:', error);

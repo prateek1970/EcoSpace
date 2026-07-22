@@ -13,7 +13,7 @@ const trackSchema = new mongoose.Schema({
   },
   category: {
     type: String,
-    enum: ['Acoustic Cover', 'Original Song', 'Jam Session', 'Snippet'],
+    enum: ['Acoustic Cover', 'Original Song', 'Jam Session', 'Festival Snippet'],
     default: 'Acoustic Cover'
   },
   audioUrl: {

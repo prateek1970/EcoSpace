@@ -3,220 +3,114 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Verify OTP | Echo Showcase Hub</title>
-  
-  <!-- Bootstrap 5 CSS CDN -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-  
-  <!-- Bootstrap Icons CDN -->
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-  
-  <!-- Google Fonts: Inter -->
+  <title>Verify OTP | EchoSpace</title>
+
+  <!-- Google Fonts: Bebas Neue, Montserrat, Inter -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-  
-  <!-- Custom CSS -->
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Montserrat:wght@700;800;900&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            plum: '#1D0324',
+            violet: '#280732',
+            magenta: '#350B42',
+            dustyPink: '#FFD2E1',
+            neonPink: '#FF007F',
+            laserGreen: '#39FF14',
+            cyanLight: '#00F0FF',
+            softPink: '#F9CBD9',
+            mutedRose: '#C994A7'
+          },
+          fontFamily: {
+            display: ['Bebas Neue', 'sans-serif'],
+            header: ['Montserrat', 'sans-serif'],
+            sans: ['Inter', 'sans-serif']
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Festival Design System Stylesheet -->
   <link rel="stylesheet" href="/css/style.css">
 </head>
-<body class="bg-dark text-light d-flex flex-column min-vh-100 position-relative">
+<body class="bg-[#1D0324] text-white font-sans antialiased selection:bg-[#FF007F] selection:text-white min-h-screen flex flex-col justify-between">
 
-  <!-- Ambient Glass Background Glowing Orbs -->
-  <div class="ambient-glow-container">
-    <div class="ambient-orb ambient-orb-1"></div>
-    <div class="ambient-orb ambient-orb-2"></div>
-    <div class="ambient-orb ambient-orb-3"></div>
+  <div class="fixed inset-0 pointer-events-none z-0">
+    <div class="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-[#FF007F]/20 blur-[150px] rounded-full"></div>
+    <div class="absolute bottom-1/4 right-1/4 w-[400px] h-[400px] bg-[#39FF14]/15 blur-[140px] rounded-full"></div>
   </div>
 
-  <!-- Minimal Auth Navbar -->
-  <nav class="navbar navbar-dark sticky-top echo-navbar py-3">
-    <div class="container">
-      <a class="navbar-brand d-flex align-items-center gap-2 fw-bold" href="/">
-        <div class="brand-icon-box bg-warning text-dark rounded-circle d-flex align-items-center justify-content-center" style="width: 38px; height: 38px;">
-          <i class="bi bi-soundwave fs-4"></i>
-        </div>
-        <span class="fs-4 text-light">Echo<span class="text-warning">Hub</span></span>
-      </a>
-    </div>
-  </nav>
+  <header class="relative z-20 px-6 py-5 max-w-7xl mx-auto w-full flex items-center justify-between">
+    <a href="/" class="flex items-center gap-2 group">
+      <span class="w-9 h-9 rounded-full bg-gradient-to-tr from-[#FF007F] to-[#39FF14] flex items-center justify-center text-[#1D0324] font-black text-xl shadow-[0_0_15px_#FF007F]">
+        ⚡
+      </span>
+      <span class="font-display text-2xl text-[#FFD2E1] tracking-widest leading-none group-hover:text-[#39FF14] transition-colors">
+        ECHOSPACE
+      </span>
+    </a>
+    <a href="/auth/login" class="text-xs font-header tracking-wider text-[#F9CBD9] hover:text-[#FF007F] transition-colors">
+      ← Back to Login
+    </a>
+  </header>
 
-  <main class="flex-grow-1 d-flex align-items-center justify-content-center py-5">
-    <div class="container">
-      <div class="row justify-content-center">
-        <div class="col-lg-5 col-md-7 col-sm-10">
+  <main class="relative z-10 max-w-md w-full mx-auto px-4 py-8">
+    <div class="glass-panel rounded-3xl p-8 sm:p-10 border border-[#FF007F]/40 shadow-[0_0_40px_rgba(255,0,127,0.3)] text-center relative overflow-hidden">
+      
+      <span class="inline-block px-3.5 py-1 rounded-full text-[10px] font-header font-extrabold tracking-widest uppercase bg-[#39FF14] text-[#1D0324] mb-3">
+        OTP VERIFICATION
+      </span>
 
-          <!-- Verification Glass Card -->
-          <div class="auth-card glass-panel rounded-4 p-4 p-md-5 shadow-lg">
-            
-            <!-- Header -->
-            <div class="text-center mb-4">
-              <div class="auth-icon-box bg-info bg-opacity-10 border border-info border-opacity-25 rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 64px; height: 64px;">
-                <i class="bi bi-shield-lock-fill fs-2 text-info"></i>
-              </div>
-              <h1 class="h3 fw-bold text-light mb-1">Verify Your Identity</h1>
-              <p class="text-muted small">Enter the OTP codes sent to your email & mobile</p>
-            </div>
+      <h1 class="font-display text-5xl text-[#FFD2E1] tracking-wider mb-1 drop-shadow-[0_0_15px_#FF007F]">
+        VERIFY OTP CODE
+      </h1>
+      <p class="text-xs text-[#C994A7] mb-6">
+        Enter the 6-digit code sent to <strong class="text-[#39FF14]"><%= emailOrPhone || 'your account' %></strong>
+      </p>
 
-            <!-- Destination Info -->
-            <div class="d-flex flex-column gap-2 mb-4">
-              <div class="d-flex align-items-center gap-2 p-2 rounded-3" style="background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.1);">
-                <i class="bi bi-envelope-check text-success"></i>
-                <small class="text-muted">Email OTP sent to <strong class="text-light"><%= email %></strong></small>
-              </div>
-              <div class="d-flex align-items-center gap-2 p-2 rounded-3" style="background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.1);">
-                <i class="bi bi-phone-vibrate text-success"></i>
-                <small class="text-muted">Mobile OTP sent to <strong class="text-light"><%= mobile %></strong></small>
-              </div>
-            </div>
-
-            <!-- Verification Codes Card -->
-            <div class="glass-panel p-3 rounded-4 mb-4 border border-warning border-opacity-25" style="background: rgba(255, 193, 7, 0.06);">
-              <div class="d-flex align-items-center justify-content-between mb-2">
-                <span class="small fw-bold text-warning d-flex align-items-center gap-1">
-                  <i class="bi bi-key-fill"></i> Generated Verification Codes:
-                </span>
-                <% if (simulatedEmailOtp && simulatedMobileOtp) { %>
-                  <button type="button" class="btn btn-sm btn-glass text-warning py-0 px-2 rounded-pill" style="font-size: 0.75rem;" onclick="autoFillOTPs('<%= simulatedEmailOtp %>', '<%= simulatedMobileOtp %>')">
-                    ⚡ Auto-Fill Codes
-                  </button>
-                <% } %>
-              </div>
-              <div class="row g-2 text-center">
-                <div class="col-6">
-                  <div class="p-2 rounded-3" style="background: rgba(0,0,0,0.3); border: 1px solid rgba(255,193,7,0.2);">
-                    <small class="text-muted d-block" style="font-size: 0.7rem;">Gmail OTP</small>
-                    <strong class="fs-5 text-warning font-monospace"><%= simulatedEmailOtp || 'Sent to inbox' %></strong>
-                  </div>
-                </div>
-                <div class="col-6">
-                  <div class="p-2 rounded-3" style="background: rgba(0,0,0,0.3); border: 1px solid rgba(6,182,212,0.2);">
-                    <small class="text-muted d-block" style="font-size: 0.7rem;">Mobile OTP</small>
-                    <strong class="fs-5 text-info font-monospace"><%= simulatedMobileOtp || 'Sent to SMS' %></strong>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <!-- Error/Message Alerts -->
-            <% if (error) { %>
-              <div class="alert alert-danger d-flex align-items-center gap-2 rounded-3 py-2 px-3" role="alert">
-                <i class="bi bi-exclamation-triangle-fill"></i>
-                <small><%= error %></small>
-              </div>
-            <% } %>
-            <% if (message) { %>
-              <div class="alert alert-success d-flex align-items-center gap-2 rounded-3 py-2 px-3" role="alert">
-                <i class="bi bi-check-circle-fill"></i>
-                <small><%= message %></small>
-              </div>
-            <% } %>
-
-            <!-- OTP Verification Form -->
-            <form action="/auth/verify" method="POST" class="needs-validation" novalidate id="verifyForm">
-              
-              <!-- Email OTP -->
-              <div class="mb-3">
-                <label for="emailOtp" class="form-label small text-light fw-semibold">
-                  <i class="bi bi-envelope me-1 text-warning"></i> Email OTP Code
-                </label>
-                <input type="text" class="form-control echo-input otp-input text-center fw-bold fs-4" id="emailOtp" name="emailOtp" 
-                       placeholder="● ● ● ● ● ●" maxlength="6" pattern="[0-9]{6}" required autocomplete="one-time-code"
-                       style="letter-spacing: 8px;">
-                <div class="d-flex justify-content-between mt-2">
-                  <small class="text-muted">Check your inbox (& spam folder)</small>
-                  <form action="/auth/resend/email" method="POST" class="d-inline">
-                    <button type="submit" class="btn btn-link btn-sm text-warning p-0 text-decoration-none" formaction="/auth/resend/email" formmethod="POST">
-                      <i class="bi bi-arrow-clockwise me-1"></i>Resend
-                    </button>
-                  </form>
-                </div>
-              </div>
-
-              <!-- Mobile OTP -->
-              <div class="mb-4">
-                <label for="mobileOtp" class="form-label small text-light fw-semibold">
-                  <i class="bi bi-phone me-1 text-warning"></i> Mobile OTP Code
-                </label>
-                <input type="text" class="form-control echo-input otp-input text-center fw-bold fs-4" id="mobileOtp" name="mobileOtp" 
-                       placeholder="● ● ● ● ● ●" maxlength="6" pattern="[0-9]{6}" required autocomplete="one-time-code"
-                       style="letter-spacing: 8px;">
-                <div class="d-flex justify-content-between mt-2">
-                  <small class="text-muted">Check your mobile / console</small>
-                  <form action="/auth/resend/sms" method="POST" class="d-inline">
-                    <button type="submit" class="btn btn-link btn-sm text-warning p-0 text-decoration-none" formaction="/auth/resend/sms" formmethod="POST">
-                      <i class="bi bi-arrow-clockwise me-1"></i>Resend
-                    </button>
-                  </form>
-                </div>
-              </div>
-
-              <!-- Countdown Timer -->
-              <div class="text-center mb-3">
-                <small class="text-muted">
-                  <i class="bi bi-clock me-1"></i> OTPs expire in <strong class="text-warning" id="countdown">5:00</strong>
-                </small>
-              </div>
-
-              <button type="submit" class="btn btn-warning fw-bold w-100 rounded-3 py-2 shadow" id="verifyBtn">
-                <i class="bi bi-check2-all me-1"></i> Verify & Create Account
-              </button>
-            </form>
-
-            <!-- Back to register -->
-            <div class="text-center mt-4">
-              <a href="/auth/<%= authFlow === 'login' ? 'login' : 'register' %>" class="text-muted small text-decoration-none">
-                <i class="bi bi-arrow-left me-1"></i> Go back
-              </a>
-            </div>
+      <div class="auth-container text-left">
+        <div id="step-verify-otp" class="space-y-4">
+          <div>
+            <label class="text-[10px] font-header uppercase tracking-widest text-[#39FF14] block mb-1">
+              Enter 6-Digit OTP *
+            </label>
+            <input
+              type="text"
+              id="otpInput"
+              placeholder="Enter 6-Digit OTP"
+              maxlength="6"
+              class="w-full px-4 py-3 rounded-xl bg-[#1D0324] border border-[#39FF14]/40 text-center font-mono text-lg text-[#39FF14] tracking-widest focus:outline-none focus:border-[#39FF14]"
+            />
           </div>
-
+          <button
+            id="btn-verify-otp"
+            onclick="handleVerifyOTP()"
+            class="w-full py-3.5 rounded-full btn-neon-green font-header text-xs tracking-widest uppercase shadow-[0_0_20px_#39FF14]"
+          >
+            Verify & Enter
+          </button>
         </div>
+
+        <div id="auth-alert" style="display: none;"></div>
       </div>
+
     </div>
   </main>
 
-  <!-- Bootstrap 5 JS -->
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+  <footer class="relative z-10 py-6 text-center text-[11px] text-[#C994A7] font-mono">
+    © 2026 ECHOSPACE AUTHENTICATION SYSTEM
+  </footer>
+
+  <script src="/js/auth.js"></script>
   <script>
-    // Helper to auto-fill verification codes
-    function autoFillOTPs(emailCode, mobileCode) {
-      if (emailCode) document.getElementById('emailOtp').value = emailCode;
-      if (mobileCode) document.getElementById('mobileOtp').value = mobileCode;
-    }
-
-    // Countdown timer (5 minutes)
-    let totalSeconds = 5 * 60;
-    const countdownEl = document.getElementById('countdown');
-    const timer = setInterval(() => {
-      totalSeconds--;
-      const mins = Math.floor(totalSeconds / 60);
-      const secs = totalSeconds % 60;
-      countdownEl.textContent = `${mins}:${secs.toString().padStart(2, '0')}`;
-      if (totalSeconds <= 60) countdownEl.classList.replace('text-warning', 'text-danger');
-      if (totalSeconds <= 0) {
-        clearInterval(timer);
-        countdownEl.textContent = 'Expired';
-      }
-    }, 1000);
-
-    // Auto-focus and digit-only filtering
-    document.querySelectorAll('.otp-input').forEach(input => {
-      input.addEventListener('input', function() {
-        this.value = this.value.replace(/[^0-9]/g, '');
-      });
-    });
-
-    // Form validation + loading state
-    document.getElementById('verifyForm').addEventListener('submit', function(e) {
-      if (!this.checkValidity()) {
-        e.preventDefault();
-        e.stopPropagation();
-      } else {
-        const btn = document.getElementById('verifyBtn');
-        btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span> Verifying...';
-      }
-      this.classList.add('was-validated');
-    });
+    userTarget = "<%= emailOrPhone %>";
   </script>
 </body>
 </html>

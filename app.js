@@ -7,13 +7,16 @@ require('dotenv').config();
 const indexRoutes = require('./routes/index');
 const adminRoutes = require('./routes/admin');
 const authRoutes = require('./routes/auth');
+const reviewRoutes = require('./routes/reviews');
+const bookingRoutes = require('./routes/booking');
 const { loadUser, requireAuth } = require('./middleware/authMiddleware');
+const connectDB = require('./config/db');
 const Track = require('./models/Track');
 const CollabRequest = require('./models/CollabRequest');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
-const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/music_showcase';
+const MONGODB_URI = process.env.MONGODB_URI || 'mongodb+srv://Deep2004:Deep2004@prateek.qwa3k5w.mongodb.net/echospace?retryWrites=true&w=majority&appName=Prateek';
 
 // Configure View Engine & Public Static Directory
 app.set('view engine', 'ejs');
@@ -40,7 +43,10 @@ app.use(loadUser);
 
 // Mount Application Routes
 app.use('/auth', authRoutes);
-app.use('/', requireAuth, indexRoutes);
+app.use('/api/auth', authRoutes);
+app.use('/', indexRoutes);
+app.use('/', reviewRoutes);
+app.use('/', bookingRoutes);
 app.use('/admin', requireAuth, adminRoutes);
 
 // 404 Handler
@@ -60,30 +66,28 @@ app.use((req, res) => {
 // Database Connection & Server Initializer
 async function startServer() {
   try {
-    console.log(`[Database] Connecting to MongoDB at: ${MONGODB_URI}`);
-    await mongoose.connect(MONGODB_URI);
-    console.log('[Database] MongoDB connection established successfully.');
+    await connectDB();
 
-    // Seed database if empty
+    // Seed MongoDB Atlas if empty
     await seedInitialData();
 
     app.listen(PORT, () => {
       console.log(`=======================================================`);
-      console.log(`🎵 Echo Showcase Hub is live on http://localhost:${PORT}`);
+      console.log(`⚡ EchoSpace (MongoDB Atlas) is live on http://localhost:${PORT}`);
       console.log(`=======================================================`);
     });
   } catch (error) {
-    console.error('[Database Error] Failed to connect to MongoDB:', error.message);
-    console.log('[Info] Attempting server start anyway (routes will handle fallback error state gracefully)...');
+    console.error('[Database Error] MongoDB Atlas connection error:', error.message);
+    console.log('[Info] Attempting server start anyway...');
     
     app.listen(PORT, () => {
-      console.log(`⚠️ Server running in fallback mode on http://localhost:${PORT}`);
+      console.log(`⚠️ Server running on http://localhost:${PORT}`);
     });
   }
 }
 
 /**
- * Seed initial sample tracks and collab calls if database is empty
+ * Seed initial sample tracks and collab calls if fallback database is empty
  */
 async function seedInitialData() {
   try {
@@ -121,7 +125,7 @@ async function seedInitialData() {
         {
           title: 'Acoustic Harmony Snippet #4',
           artistName: 'Clara & The Waves',
-          category: 'Snippet',
+          category: 'Festival Snippet',
           audioUrl: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-4.mp3',
           description: 'Idea for an upcoming EP chorus. Looking for a lead vocalist to collaborate on full track!',
           likes: 35,

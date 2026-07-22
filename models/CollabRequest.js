@@ -14,7 +14,7 @@ const collabRequestSchema = new mongoose.Schema({
   },
   role: {
     type: String,
-    enum: ['Vocalist', 'Guitarist', 'Producer', 'Songwriter', 'Other'],
+    enum: ['Vocalist', 'Guitarist', 'Producer', 'Songwriter', 'Special Guest'],
     required: [true, 'Role selection is required']
   },
   projectType: {
