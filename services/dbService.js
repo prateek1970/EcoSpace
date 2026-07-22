@@ -148,6 +148,7 @@ module.exports = {
   deleteTrack,
   incrementTrackLikes,
   getCollabRequests,
+  getAllCollabRequests: getCollabRequests,
   addCollabRequest,
   updateCollabStatus,
   deleteCollabRequest,

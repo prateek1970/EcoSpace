@@ -15,6 +15,9 @@ const { loadUser, requireAuth } = require('./middleware/authMiddleware');
 const connectDB = require('./config/db');
 const Track = require('./models/Track');
 const CollabRequest = require('./models/CollabRequest');
+const Review = require('./models/Review');
+const Event = require('./models/Event');
+const { initialEvents } = require('./seedEvents');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -245,6 +248,24 @@ async function seedInitialData() {
         }
       ]);
       console.log('[Seeder] Sample collaboration requests created successfully.');
+    }
+
+    const reviewCount = await Review.countDocuments();
+    if (reviewCount === 0) {
+      console.log('[Seeder] Populating database with sample fan wall reviews...');
+      await Review.create([
+        { author: 'Aarav Sharma', message: 'A.R. Rahman opening night was pure magic! Unforgettable experience at NICE Grounds.', rating: 5 },
+        { author: 'Priya Nair', message: 'Coldplay LED wristbands turned the arena into a galaxy! 10/10 organization.', rating: 5 },
+        { author: 'Rohan Mehta', message: 'Arijit Singh finale gave me chills. The acoustic arrangements were phenomenal!', rating: 5 }
+      ]);
+      console.log('[Seeder] Sample reviews created successfully.');
+    }
+
+    const eventCount = await Event.countDocuments();
+    if (eventCount === 0) {
+      console.log('[Seeder] Populating database with 9 concert events...');
+      await Event.create(initialEvents);
+      console.log('[Seeder] Sample 9 concert events created successfully.');
     }
   } catch (err) {
     console.error('[Seeder Error] Failed to seed initial data:', err);
