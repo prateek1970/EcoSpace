@@ -2,6 +2,8 @@ const express = require('express');
 const mongoose = require('mongoose');
 const path = require('path');
 const session = require('express-session');
+const helmet = require('helmet');
+const rateLimit = require('express-rate-limit');
 require('dotenv').config();
 
 const indexRoutes = require('./routes/index');
@@ -16,25 +18,104 @@ const CollabRequest = require('./models/CollabRequest');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
-const MONGODB_URI = process.env.MONGODB_URI || 'mongodb+srv://Deep2004:Deep2004@prateek.qwa3k5w.mongodb.net/echospace?retryWrites=true&w=majority&appName=Prateek';
+
+// ─────────────────────────────────────────────
+// SECURITY: Validate required env vars at startup
+// ─────────────────────────────────────────────
+if (!process.env.SESSION_SECRET || process.env.SESSION_SECRET === 'echohub_fallback_secret') {
+  console.error('[Config] ❌ SESSION_SECRET is weak or not set in .env. Please set a strong random secret.');
+  if (process.env.NODE_ENV === 'production') process.exit(1);
+}
+
+// ─────────────────────────────────────────────
+// SECURITY: Helmet — set secure HTTP headers
+// ─────────────────────────────────────────────
+app.use(helmet({
+  contentSecurityPolicy: {
+    directives: {
+      defaultSrc: ["'self'"],
+      scriptSrc: [
+        "'self'",
+        "'unsafe-inline'",  // needed for inline scripts in EJS
+        'https://cdn.tailwindcss.com',
+        'https://fonts.googleapis.com',
+        'https://cdn.jsdelivr.net',
+        'https://cdnjs.cloudflare.com'
+      ],
+      styleSrc: [
+        "'self'",
+        "'unsafe-inline'",
+        'https://fonts.googleapis.com',
+        'https://cdn.tailwindcss.com',
+        'https://cdnjs.cloudflare.com'
+      ],
+      fontSrc: [
+        "'self'",
+        'https://fonts.gstatic.com',
+        'https://cdnjs.cloudflare.com'
+      ],
+      imgSrc: ["'self'", 'data:', 'https://api.qrserver.com'],
+      connectSrc: ["'self'"],
+      frameSrc: ["'none'"],
+      objectSrc: ["'none'"]
+    }
+  },
+  referrerPolicy: { policy: 'same-origin' },
+  crossOriginEmbedderPolicy: false  // allow fonts/cdn
+}));
+
+// ─────────────────────────────────────────────
+// SECURITY: Global rate limiter — prevent DDoS/brute force
+// ─────────────────────────────────────────────
+const globalLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,  // 15 minutes
+  max: 200,
+  standardHeaders: true,
+  legacyHeaders: false,
+  message: { success: false, message: 'Too many requests. Please try again later.' }
+});
+app.use(globalLimiter);
+
+// ─────────────────────────────────────────────
+// SECURITY: Tighter rate limiter on auth endpoints
+// ─────────────────────────────────────────────
+const authLimiter = rateLimit({
+  windowMs: 10 * 60 * 1000,  // 10 minutes
+  max: 15,
+  standardHeaders: true,
+  legacyHeaders: false,
+  message: { success: false, message: 'Too many login attempts. Try again in 10 minutes.' }
+});
+app.use('/auth/send-otp', authLimiter);
+app.use('/auth/verify-otp', authLimiter);
+app.use('/auth/login', authLimiter);
+app.use('/api/auth/send-otp', authLimiter);
+app.use('/api/auth/verify-otp', authLimiter);
+app.use('/api/auth/login', authLimiter);
 
 // Configure View Engine & Public Static Directory
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 
-// Body Parser & Static Middleware
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
-app.use(express.static(path.join(__dirname, 'public')));
+// Body Parser & Static Middleware — SECURITY: limit body size
+app.use(express.json({ limit: '10kb' }));
+app.use(express.urlencoded({ extended: true, limit: '10kb' }));
+app.use(express.static(path.join(__dirname, 'public'), {
+  maxAge: process.env.NODE_ENV === 'production' ? '7d' : '0'
+}));
 
-// Session Middleware
+// ─────────────────────────────────────────────
+// SECURITY: Session — secure cookies, no guessable secret
+// ─────────────────────────────────────────────
 app.use(session({
-  secret: process.env.SESSION_SECRET || 'echohub_fallback_secret',
-  resave: true,
-  saveUninitialized: true,
+  secret: process.env.SESSION_SECRET,
+  resave: false,
+  saveUninitialized: false,
   cookie: {
     maxAge: 1000 * 60 * 60 * 24 * 7, // 7 days
-    httpOnly: true
+    httpOnly: true,                    // block JS access to cookie
+    secure: process.env.NODE_ENV === 'production', // HTTPS only in prod
+    sameSite: 'lax'                   // CSRF protection
   }
 }));
 
@@ -49,12 +130,14 @@ app.use('/', reviewRoutes);
 app.use('/', bookingRoutes);
 app.use('/admin', requireAuth, adminRoutes);
 
+// ─────────────────────────────────────────────
 // 404 Handler
+// ─────────────────────────────────────────────
 app.use((req, res) => {
   res.status(404).render('index', {
     tracks: [],
     collabRequests: [],
-    categories: ['Acoustic Cover', 'Original Song', 'Jam Session', 'Snippet'],
+    categories: ['Acoustic Cover', 'Original Song', 'Jam Session', 'Festival Snippet'],
     selectedCategory: '',
     searchQuery: '',
     isSubmitted: false,
@@ -63,12 +146,20 @@ app.use((req, res) => {
   });
 });
 
+// ─────────────────────────────────────────────
+// Global Error Handler
+// ─────────────────────────────────────────────
+app.use((err, req, res, next) => {
+  console.error('[Server Error]', err.stack);
+  res.status(500).json({ success: false, message: 'An internal server error occurred.' });
+});
+
+// ─────────────────────────────────────────────
 // Database Connection & Server Initializer
+// ─────────────────────────────────────────────
 async function startServer() {
   try {
     await connectDB();
-
-    // Seed MongoDB Atlas if empty
     await seedInitialData();
 
     app.listen(PORT, () => {
@@ -78,16 +169,13 @@ async function startServer() {
     });
   } catch (error) {
     console.error('[Database Error] MongoDB Atlas connection error:', error.message);
-    console.log('[Info] Attempting server start anyway...');
-    
-    app.listen(PORT, () => {
-      console.log(`⚠️ Server running on http://localhost:${PORT}`);
-    });
+    console.log('[Info] Cannot start server without database. Exiting...');
+    process.exit(1);
   }
 }
 
 /**
- * Seed initial sample tracks and collab calls if fallback database is empty
+ * Seed initial sample tracks and collab calls if database is empty
  */
 async function seedInitialData() {
   try {
@@ -100,7 +188,7 @@ async function seedInitialData() {
           artistName: 'Maya Lin',
           category: 'Original Song',
           audioUrl: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3',
-          description: 'A cozy fingerstyle acoustic track recorded in Standard E tuning with Neumann KM184 mics.',
+          description: 'A cozy fingerstyle acoustic track recorded in Standard E tuning.',
           likes: 42,
           tags: ['fingerstyle', 'acoustic', 'chill', 'ambient']
         },
@@ -109,7 +197,7 @@ async function seedInitialData() {
           artistName: 'Leo Vance',
           category: 'Acoustic Cover',
           audioUrl: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3',
-          description: 'Stripped-back acoustic guitar cover featuring warm natural room reverb and soft vocal backing.',
+          description: 'Stripped-back acoustic guitar cover with soft vocal backing.',
           likes: 28,
           tags: ['cover', 'indie', 'guitar']
         },
@@ -127,7 +215,7 @@ async function seedInitialData() {
           artistName: 'Clara & The Waves',
           category: 'Festival Snippet',
           audioUrl: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-4.mp3',
-          description: 'Idea for an upcoming EP chorus. Looking for a lead vocalist to collaborate on full track!',
+          description: 'Idea for an upcoming EP chorus. Looking for a lead vocalist!',
           likes: 35,
           tags: ['snippet', 'harmony', 'wip']
         }
@@ -144,7 +232,7 @@ async function seedInitialData() {
           senderEmail: 'sarah.vocals@example.com',
           role: 'Vocalist',
           projectType: 'Indie Folk Single',
-          message: 'Looking for a soulful female or male vocalist for an acoustic indie song. Key of D, 95 BPM. Demo available!',
+          message: 'Looking for a soulful vocalist for an acoustic indie song.',
           status: 'Open'
         },
         {
@@ -152,7 +240,7 @@ async function seedInitialData() {
           senderEmail: 'marcus.producer@example.com',
           role: 'Producer',
           projectType: 'Acoustic Pop EP',
-          message: 'Acoustic producer seeking a songwriter/guitarist to collaborate on 3 stripped-back tracks for Spotify release.',
+          message: 'Acoustic producer seeking a songwriter/guitarist to collaborate on 3 stripped-back tracks.',
           status: 'In Review'
         }
       ]);

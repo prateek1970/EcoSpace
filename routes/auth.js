@@ -35,28 +35,44 @@ router.get('/verify', (req, res) => {
 });
 
 // ==========================================
-// 2. SEND OTP (Handles Login & Registration)
+// 2. SEND OTP — with OTP rate limiting & expiry
 // ==========================================
 const handleSendOTP = async (req, res) => {
   try {
-    const emailOrPhone = req.body.emailOrPhone || req.body.email || req.body.username;
-    if (!emailOrPhone) {
+    const rawInput = req.body.emailOrPhone || req.body.email || req.body.username;
+    if (!rawInput) {
       return res.status(400).json({ success: false, message: 'Email or Mobile Number is required.' });
     }
 
-    const cleanInput = String(emailOrPhone).trim().toLowerCase();
+    const cleanInput = String(rawInput).trim().toLowerCase();
 
-    // Generate a 6-digit OTP as a STRING
-    const generatedOtp = Math.floor(100000 + Math.random() * 900000).toString();
-    const otpExpires = new Date(Date.now() + 10 * 60 * 1000); // 10 minutes expiry
+    // SECURITY: Basic format validation
+    const isEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(cleanInput);
+    const isPhone = /^[0-9]{10,15}$/.test(cleanInput);
+    if (!isEmail && !isPhone) {
+      return res.status(400).json({ success: false, message: 'Please enter a valid email address or 10-digit mobile number.' });
+    }
 
-    // Find user or create a new pending user record
+    // SECURITY: Enforce OTP cooldown (max 1 OTP per 60s per user)
     let user = await User.findOne({ emailOrPhone: cleanInput });
-    
+    if (user && user.otpExpires) {
+      const remainingMs = user.otpExpires.getTime() - Date.now();
+      if (remainingMs > (10 * 60 * 1000 - 60 * 1000)) {
+        return res.status(429).json({
+          success: false,
+          message: 'OTP already sent. Please wait 60 seconds before requesting another.'
+        });
+      }
+    }
+
+    // Generate a 6-digit OTP
+    const generatedOtp = Math.floor(100000 + Math.random() * 900000).toString();
+    const otpExpires = new Date(Date.now() + 10 * 60 * 1000); // 10 minutes
+
     if (!user) {
       user = new User({
         emailOrPhone: cleanInput,
-        name: cleanInput.split('@')[0] || 'Creator'
+        name: isEmail ? cleanInput.split('@')[0] : 'Music Fan'
       });
     }
 
@@ -64,12 +80,16 @@ const handleSendOTP = async (req, res) => {
     user.otpExpires = otpExpires;
     await user.save();
 
-    console.log(`[AUTH DEBUG] OTP for ${cleanInput} is: ${generatedOtp}`);
+    // SECURITY: Never expose OTP in production API response
+    if (process.env.NODE_ENV !== 'production') {
+      console.log(`[AUTH DEBUG] OTP for ${cleanInput} is: ${generatedOtp}`);
+    }
 
-    return res.json({ 
-      success: true, 
-      message: 'OTP sent successfully! Enter the code below.',
-      debugOtp: generatedOtp 
+    return res.json({
+      success: true,
+      message: 'OTP sent! Enter the 6-digit code below.',
+      // SECURITY: Only expose debugOtp in dev mode
+      ...(process.env.NODE_ENV !== 'production' && { debugOtp: generatedOtp })
     });
 
   } catch (err) {
@@ -82,36 +102,45 @@ router.post('/send-otp', handleSendOTP);
 router.post('/api/auth/send-otp', handleSendOTP);
 
 // ==========================================
-// 3. VERIFY OTP & REDIRECT TO MAIN PAGE
+// 3. VERIFY OTP — strict expiry & match check
 // ==========================================
 const handleVerifyOTP = async (req, res) => {
   try {
-    const emailOrPhone = req.body.emailOrPhone || req.body.email;
+    const rawInput = req.body.emailOrPhone || req.body.email;
     const otp = req.body.otp;
 
-    if (!emailOrPhone || !otp) {
+    if (!rawInput || !otp) {
       return res.status(400).json({ success: false, message: 'Email/Phone and OTP are required.' });
     }
 
-    const cleanInput = String(emailOrPhone).trim().toLowerCase();
-    let user = await User.findOne({ emailOrPhone: cleanInput });
+    const cleanInput = String(rawInput).trim().toLowerCase();
+    const inputOtpString = String(otp).trim();
 
-    if (!user) {
-      user = new User({
-        emailOrPhone: cleanInput,
-        name: cleanInput.split('@')[0] || 'Creator'
-      });
+    // SECURITY: Validate OTP format is 6 digits
+    if (!/^\d{6}$/.test(inputOtpString)) {
+      return res.status(400).json({ success: false, message: 'OTP must be a 6-digit number.' });
     }
 
-    const inputOtpString = String(otp).trim();
-    const storedOtpString = user.otp ? String(user.otp).trim() : null;
+    const user = await User.findOne({ emailOrPhone: cleanInput });
 
-    // Allow verification if OTP matches OR auto-accept 6-digit input for dev ease
-    if (storedOtpString && inputOtpString !== storedOtpString && inputOtpString !== '123456') {
+    if (!user || !user.otp) {
+      return res.status(400).json({ success: false, message: 'No OTP found. Please request a new one.' });
+    }
+
+    // SECURITY: Check OTP expiry
+    if (!user.otpExpires || user.otpExpires < new Date()) {
+      user.otp = null;
+      user.otpExpires = null;
+      await user.save();
+      return res.status(400).json({ success: false, message: 'OTP has expired. Please request a new one.' });
+    }
+
+    // SECURITY: Strict OTP comparison — no backdoor codes
+    if (inputOtpString !== String(user.otp).trim()) {
       return res.status(400).json({ success: false, message: 'Invalid OTP entered. Please try again.' });
     }
 
-    // Mark as verified & clear temporary OTP fields
+    // Mark as verified & clear OTP fields
     user.isVerified = true;
     user.otp = null;
     user.otpExpires = null;
@@ -122,19 +151,31 @@ const handleVerifyOTP = async (req, res) => {
     req.session.user = {
       id: user._id,
       emailOrPhone: user.emailOrPhone,
-      name: user.name || 'Creator'
+      name: user.name || 'Music Fan'
     };
 
-    req.session.save((err) => {
-      if (err) {
-        console.error('Session Save Error:', err);
-        return res.status(500).json({ success: false, message: 'Failed to establish login session.' });
+    // SECURITY: Regenerate session ID after login to prevent session fixation
+    req.session.regenerate((regenerateErr) => {
+      if (regenerateErr) {
+        console.error('Session Regenerate Error:', regenerateErr);
       }
+      req.session.userId = user._id;
+      req.session.user = {
+        id: user._id,
+        emailOrPhone: user.emailOrPhone,
+        name: user.name || 'Music Fan'
+      };
 
-      return res.json({
-        success: true,
-        message: 'Verification successful!',
-        redirectUrl: '/'
+      req.session.save((saveErr) => {
+        if (saveErr) {
+          console.error('Session Save Error:', saveErr);
+          return res.status(500).json({ success: false, message: 'Failed to establish login session.' });
+        }
+        return res.json({
+          success: true,
+          message: 'Verification successful!',
+          redirectUrl: '/'
+        });
       });
     });
 
@@ -148,55 +189,63 @@ router.post('/verify-otp', handleVerifyOTP);
 router.post('/api/auth/verify-otp', handleVerifyOTP);
 
 // ==========================================
-// 4. DIRECT FORM LOGIN (Handles password & email POST)
+// 4. DIRECT FORM LOGIN — removed auto-login bypass
 // ==========================================
 const handleDirectLogin = async (req, res) => {
   try {
-    const input = req.body.emailOrPhone || req.body.email || req.body.username;
-    if (!input) {
-      if (req.headers['accept']?.includes('json') || req.headers['content-type']?.includes('json')) {
+    const rawInput = req.body.emailOrPhone || req.body.email || req.body.username;
+    if (!rawInput) {
+      if (req.accepts('json')) {
         return res.status(400).json({ success: false, message: 'Email or Mobile Number is required.' });
       }
       return res.render('login', { error: 'Please enter your Email or Mobile Number.', message: null });
     }
 
-    const cleanInput = String(input).trim().toLowerCase();
+    const cleanInput = String(rawInput).trim().toLowerCase();
+    const isEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(cleanInput);
+    const isPhone = /^[0-9]{10,15}$/.test(cleanInput);
 
+    if (!isEmail && !isPhone) {
+      if (req.accepts('json')) {
+        return res.status(400).json({ success: false, message: 'Please enter a valid email or mobile number.' });
+      }
+      return res.render('login', { error: 'Please enter a valid email or mobile number.', message: null });
+    }
+
+    // SECURITY: Direct login only sets up OTP flow — does NOT auto-verify
     let user = await User.findOne({ emailOrPhone: cleanInput });
     if (!user) {
       user = new User({
         emailOrPhone: cleanInput,
-        name: cleanInput.split('@')[0] || 'Creator'
+        name: isEmail ? cleanInput.split('@')[0] : 'Music Fan'
+      });
+      await user.save();
+    }
+
+    // Generate OTP for the user and send to verify page
+    const generatedOtp = Math.floor(100000 + Math.random() * 900000).toString();
+    user.otp = generatedOtp;
+    user.otpExpires = new Date(Date.now() + 10 * 60 * 1000);
+    await user.save();
+
+    if (process.env.NODE_ENV !== 'production') {
+      console.log(`[AUTH DEBUG] OTP for ${cleanInput} is: ${generatedOtp}`);
+    }
+
+    if (req.accepts('json')) {
+      return res.json({
+        success: true,
+        message: 'OTP sent! Please verify to complete login.',
+        redirectUrl: `/auth/verify?target=${encodeURIComponent(cleanInput)}`,
+        ...(process.env.NODE_ENV !== 'production' && { debugOtp: generatedOtp })
       });
     }
 
-    user.isVerified = true;
-    await user.save();
-
-    req.session.userId = user._id;
-    req.session.user = {
-      id: user._id,
-      emailOrPhone: user.emailOrPhone,
-      name: user.name || 'Creator'
-    };
-
-    req.session.save((err) => {
-      if (err) console.error('Session Save Error:', err);
-
-      if (req.headers['accept']?.includes('json') || req.headers['content-type']?.includes('json')) {
-        return res.json({
-          success: true,
-          message: 'Login successful!',
-          redirectUrl: '/'
-        });
-      }
-
-      return res.redirect('/');
-    });
+    return res.redirect(`/auth/verify?target=${encodeURIComponent(cleanInput)}`);
 
   } catch (err) {
     console.error('Direct Login Error:', err);
-    if (req.headers['accept']?.includes('json') || req.headers['content-type']?.includes('json')) {
+    if (req.accepts('json')) {
       return res.status(500).json({ success: false, message: 'Server error during login.' });
     }
     return res.render('login', { error: 'Server error during login.', message: null });
@@ -212,7 +261,9 @@ router.post('/api/auth/login', handleDirectLogin);
 router.get('/logout', (req, res) => {
   req.session.destroy((err) => {
     if (err) console.error('Logout error:', err);
-    res.redirect('/auth/login?msg=' + encodeURIComponent('You have been logged out.'));
+    // Clear the session cookie on the client
+    res.clearCookie('connect.sid');
+    res.redirect('/auth/login?msg=' + encodeURIComponent('You have been logged out securely.'));
   });
 });
 
@@ -221,7 +272,7 @@ router.get('/profile', (req, res) => {
     return res.redirect('/auth/login');
   }
   res.render('profile', {
-    user: req.session.user || { name: 'Creator', emailOrPhone: 'user@example.com' },
+    user: req.session.user || { name: 'Music Fan', emailOrPhone: 'user@example.com' },
     message: req.query.msg || null,
     error: req.query.err || null
   });

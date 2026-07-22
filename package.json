@@ -22,8 +22,12 @@
     "dotenv": "^16.4.5",
     "ejs": "^3.1.9",
     "express": "^4.19.2",
+    "express-rate-limit": "^8.6.0",
     "express-session": "^1.19.0",
+    "helmet": "^8.3.0",
+    "mongo-sanitize": "^1.1.0",
     "mongoose": "^8.3.1",
-    "nodemailer": "^9.0.3"
+    "nodemailer": "^9.0.3",
+    "xss-clean": "^0.1.4"
   }
 }
