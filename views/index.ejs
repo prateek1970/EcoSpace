@@ -330,7 +330,45 @@
           Submit Lucky Entry
         </button>
       </form>
-      <div id="contest-alert" class="hidden mt-4 p-3 bg-[#39FF14]/20 border border-[#39FF14] text-[#39FF14] rounded-lg text-xs font-b  <!-- BOOKING & UPI PAYMENT MODAL -->
+      <div id="contest-alert" class="hidden mt-4 p-3 bg-[#39FF14]/20 border border-[#39FF14] text-[#39FF14] rounded-lg text-xs font-bold"></div>
+    </div>
+  </section>
+
+  <!-- ACCESS ECHOSPACE CREATOR LOGIN PORTAL -->
+  <section id="login" class="py-16 px-4 bg-[#17021D] border-t border-[#FF007F]/20 flex justify-center">
+    <div class="glass-card max-w-md w-full p-8 rounded-3xl text-center relative border border-[#FF007F]/50 shadow-[0_0_50px_rgba(255,0,127,0.2)]">
+      <span class="px-4 py-1 bg-[#39FF14]/20 text-[#39FF14] text-[10px] font-extrabold rounded-full uppercase tracking-wider">
+        SECURE CREATOR LOGIN
+      </span>
+
+      <h2 class="font-bebas text-5xl text-white mt-2 glow-text">ACCESS ECHOSPACE</h2>
+      <p class="text-[#C994A7] text-xs mb-6">Enter any Mobile Number or Gmail. No pre-set password required!</p>
+
+      <div class="text-left space-y-4">
+        <div>
+          <label class="block text-[10px] font-bold text-[#FFD2E1] uppercase mb-1">MOBILE NUMBER OR GMAIL *</label>
+          <input type="text" id="loginTarget" value="creator@gmail.com" class="w-full p-3 bg-[#120218] border border-[#FF007F]/30 rounded-xl text-white text-xs focus:outline-none focus:border-[#FF007F]">
+        </div>
+
+        <button onclick="handleSendOTP()" class="w-full py-3.5 bg-[#FF007F] hover:bg-[#E6399B] text-white font-extrabold rounded-xl text-xs uppercase tracking-wider shadow-[0_0_15px_#FF007F] transition-all">
+          SEND OTP CODE
+        </button>
+
+        <div id="otpInputGroup" class="hidden space-y-2 pt-2">
+          <input type="text" id="otpCode" placeholder="Enter 6-Digit OTP" class="w-full p-3 bg-[#120218] border border-[#39FF14]/50 rounded-xl text-white text-xs">
+          <button onclick="handleVerifyOTP()" class="w-full py-3 bg-[#39FF14] hover:bg-[#2ed60f] text-black font-extrabold rounded-xl text-xs uppercase transition-all">VERIFY & LOG IN</button>
+        </div>
+
+        <button onclick="handleInstantLogin()" class="w-full py-3 bg-transparent border border-[#39FF14] text-[#39FF14] hover:bg-[#39FF14]/10 font-extrabold rounded-xl text-xs uppercase tracking-wider flex items-center justify-center gap-2 transition-all">
+          ⚡ QUICK 1-CLICK INSTANT LOGIN
+        </button>
+
+        <div id="login-alert" class="hidden p-3 bg-[#39FF14]/20 border border-[#39FF14] text-[#39FF14] rounded-lg text-xs font-bold text-center"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- BOOKING & UPI PAYMENT MODAL -->
   <div id="booking-modal" class="hidden fixed inset-0 bg-black/80 backdrop-blur-md z-50 flex items-center justify-center p-4">
     <div class="glass-card max-w-md w-full p-6 rounded-2xl relative max-h-[90vh] overflow-y-auto">
       <button onclick="closeBooking()" class="absolute top-4 right-4 text-white text-xl hover:text-[#FF007F]">✕</button>
@@ -631,22 +669,98 @@
 
     async function handleContest(e) {
       e.preventDefault();
-      const res = await fetch('/api/contest/entry', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          name: document.getElementById('cName').value,
-          contact: document.getElementById('cContact').value,
-          favoriteArtist: document.getElementById('cArtist').value,
-          reason: document.getElementById('cReason').value
-        })
-      });
-      const data = await res.json();
-      const alertBox = document.getElementById('contest-alert');
-      alertBox.innerText = data.message;
-      alertBox.classList.remove('hidden');
-      if (data.success) {
-        document.getElementById('contest-form').reset();
+      const name = document.getElementById('cName').value.trim();
+      const contact = document.getElementById('cContact').value.trim();
+      const artist = document.getElementById('cArtist').value;
+      const reason = document.getElementById('cReason').value.trim();
+
+      if (!name || !contact || !artist || !reason) {
+        alert('Please fill out all fields in the contest entry form.');
+        return;
+      }
+
+      try {
+        const res = await fetch('/api/contest/entry', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ name, contact, favoriteArtist: artist, reason })
+        });
+        const data = await res.json();
+        const alertBox = document.getElementById('contest-alert');
+        alertBox.innerText = data.message;
+        alertBox.classList.remove('hidden');
+        if (data.success) {
+          document.getElementById('contest-form').reset();
+        }
+      } catch (err) {
+        console.error('Contest Error:', err);
+        alert('Network error submitting contest entry.');
+      }
+    }
+
+    async function handleSendOTP() {
+      const target = document.getElementById('loginTarget').value.trim();
+      if (!target) return alert('Please enter your mobile number or Gmail.');
+      try {
+        const res = await fetch('/send-otp', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ emailOrPhone: target })
+        });
+        const data = await res.json();
+        const alertBox = document.getElementById('login-alert');
+        alertBox.innerText = data.message;
+        alertBox.classList.remove('hidden');
+        if (data.success) {
+          document.getElementById('otpInputGroup').classList.remove('hidden');
+        }
+      } catch (err) {
+        console.error('Send OTP Error:', err);
+        alert('Network error sending OTP.');
+      }
+    }
+
+    async function handleVerifyOTP() {
+      const target = document.getElementById('loginTarget').value.trim();
+      const otp = document.getElementById('otpCode').value.trim();
+      if (!target || !otp) return alert('Please enter OTP code.');
+      try {
+        const res = await fetch('/verify-otp', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ emailOrPhone: target, otp })
+        });
+        const data = await res.json();
+        const alertBox = document.getElementById('login-alert');
+        alertBox.innerText = data.message;
+        alertBox.classList.remove('hidden');
+        if (data.success) {
+          setTimeout(() => { window.location.href = data.redirectUrl || '/'; }, 800);
+        }
+      } catch (err) {
+        console.error('Verify OTP Error:', err);
+        alert('Network error verifying OTP.');
+      }
+    }
+
+    async function handleInstantLogin() {
+      const target = document.getElementById('loginTarget').value.trim() || 'creator@gmail.com';
+      try {
+        const res = await fetch('/instant-login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ emailOrPhone: target })
+        });
+        const data = await res.json();
+        const alertBox = document.getElementById('login-alert');
+        alertBox.innerText = data.message;
+        alertBox.classList.remove('hidden');
+        if (data.success) {
+          setTimeout(() => { window.location.href = data.redirectUrl || '/'; }, 500);
+        }
+      } catch (err) {
+        console.error('Instant Login Error:', err);
+        alert('Network error during instant login.');
       }
     }
   </script>
