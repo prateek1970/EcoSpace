@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 40" width="160" height="40">
+  <rect width="160" height="40" rx="6" fill="#0F172A"/>
+  <rect x="1" y="1" width="158" height="38" rx="5" fill="none" stroke="#F59E0B" stroke-width="1.5"/>
+  <!-- Ticket Icon -->
+  <path d="M14 14h16v12H14z" fill="#F59E0B"/>
+  <circle cx="14" cy="20" r="2" fill="#0F172A"/>
+  <circle cx="30" cy="20" r="2" fill="#0F172A"/>
+  <text x="38" y="25" font-family="'Inter', Arial, sans-serif" font-weight="900" font-size="14" fill="#FFFFFF" letter-spacing="0.5">TICKET<tspan fill="#F59E0B">9</tspan></text>
+</svg>

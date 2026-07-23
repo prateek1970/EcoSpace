@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 40" width="160" height="40">
+  <rect width="160" height="40" rx="6" fill="#E51937"/>
+  <path d="M18 12h8a4 4 0 0 1 0 8h-8v-8zm0 8h9a4 4 0 0 1 0 8h-9v-8z" fill="#FFFFFF" opacity="0.15"/>
+  <text x="14" y="26" font-family="'Helvetica Neue', Arial, sans-serif" font-weight="900" font-size="16" fill="#FFFFFF" letter-spacing="-0.5">book</text>
+  <text x="56" y="26" font-family="'Helvetica Neue', Arial, sans-serif" font-weight="900" font-size="16" fill="#F8C41C" letter-spacing="-0.5">my</text>
+  <text x="82" y="26" font-family="'Helvetica Neue', Arial, sans-serif" font-weight="900" font-size="16" fill="#FFFFFF" letter-spacing="-0.5">show</text>
+</svg>

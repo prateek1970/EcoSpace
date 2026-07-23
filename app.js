@@ -56,7 +56,7 @@ app.use(helmet({
         'https://fonts.gstatic.com',
         'https://cdnjs.cloudflare.com'
       ],
-      imgSrc: ["'self'", 'data:', 'https://api.qrserver.com'],
+      imgSrc: ["'self'", 'data:', 'https:'],
       connectSrc: ["'self'"],
       frameSrc: ["'none'"],
       objectSrc: ["'none'"]
