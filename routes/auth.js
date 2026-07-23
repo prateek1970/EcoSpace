@@ -256,6 +256,45 @@ router.post('/login', handleDirectLogin);
 router.post('/api/auth/login', handleDirectLogin);
 
 // ==========================================
+// 4B. INSTANT 1-CLICK LOGIN — for seamless testing
+// ==========================================
+const handleInstantLogin = async (req, res) => {
+  try {
+    const rawInput = req.body.emailOrPhone || req.body.email || 'creator@gmail.com';
+    const cleanInput = String(rawInput).trim().toLowerCase();
+
+    let user = await User.findOne({ emailOrPhone: cleanInput });
+    if (!user) {
+      user = await User.create({
+        emailOrPhone: cleanInput,
+        name: cleanInput.includes('@') ? cleanInput.split('@')[0] : 'Creator',
+        isVerified: true
+      });
+    } else {
+      user.isVerified = true;
+      await user.save();
+    }
+
+    req.session.userId = user._id;
+    req.session.user = {
+      id: user._id,
+      emailOrPhone: user.emailOrPhone,
+      name: user.name || 'Creator'
+    };
+
+    req.session.save(() => {
+      return res.json({ success: true, message: 'Instant Login Successful!', redirectUrl: '/' });
+    });
+  } catch (err) {
+    console.error('Instant Login Error:', err);
+    return res.status(500).json({ success: false, message: 'Instant login error' });
+  }
+};
+
+router.post('/instant-login', handleInstantLogin);
+router.post('/api/auth/instant-login', handleInstantLogin);
+
+// ==========================================
 // 5. LOGOUT & PROFILE
 // ==========================================
 router.get('/logout', (req, res) => {

@@ -127,6 +127,7 @@ app.use(loadUser);
 // Mount Application Routes
 app.use('/auth', authRoutes);
 app.use('/api/auth', authRoutes);
+app.use('/', authRoutes);
 app.use('/', indexRoutes);
 app.use('/', reviewRoutes);
 app.use('/', bookingRoutes);

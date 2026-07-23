@@ -43,6 +43,47 @@ router.get('/api/events', async (req, res) => {
   }
 });
 
+// 1B. POST /api/tickets/book - Direct Booking Endpoint
+router.post('/api/tickets/book', async (req, res) => {
+  try {
+    const { userName, userContact, artistName, eventDate, tier, partnerPlatform } = req.body;
+
+    if (!userName || !userContact) {
+      return res.status(400).json({ success: false, message: 'Name and contact are required.' });
+    }
+
+    const safeTier = String(tier).toUpperCase() === 'VIP' ? 'VIP' : 'GA';
+    const unitPrice = safeTier === 'VIP' ? 15000 : 2000;
+    const bookingId = 'NICE-' + Math.floor(100000 + Math.random() * 900000);
+
+    const upiDeepLink = `upi://pay?pa=echospace@upi&pn=EchoSpaceFestival&am=${unitPrice}&cu=INR&tn=Ticket-${bookingId}`;
+    const qrCodeUrl = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(upiDeepLink)}`;
+
+    const newTicket = new Ticket({
+      bookingId,
+      userId: req.session && req.session.userId ? req.session.userId : null,
+      userName: sanitize(userName) || 'Music Fan',
+      userContact: sanitize(userContact),
+      artistName: sanitize(artistName || 'EchoSpace Artist'),
+      eventDate: sanitize(eventDate || 'Festival Day'),
+      tier: safeTier,
+      unitPrice,
+      totalAmount: unitPrice,
+      partnerPlatform: partnerPlatform || 'BookMyShow',
+      upiDeepLink,
+      qrCodeUrl,
+      paymentStatus: 'SUCCESS'
+    });
+
+    await newTicket.save();
+
+    return res.json({ success: true, ticket: newTicket });
+  } catch (err) {
+    console.error('Direct Ticket Booking Error:', err);
+    return res.status(500).json({ success: false, message: 'Failed to process ticket booking.' });
+  }
+});
+
 // 2. POST /api/tickets/intent - Create Booking Intent & Dynamic UPI QR Code
 router.post('/api/tickets/intent', async (req, res) => {
   try {
